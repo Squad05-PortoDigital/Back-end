@@ -1,2 +1,2 @@
-# chat-back-end
-Repositório criado para o back-end da aplicação do chatbot
+# chatbot
+Repositório criado para a aplicação do chatbot
