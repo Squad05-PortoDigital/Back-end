@@ -3,38 +3,39 @@ const chatInput = document.querySelector('.chat-input textarea');
 const chatBox = document.querySelector('.chatbox');
 const chatbotToggler = document.querySelector('.chatbot-toggler');
 const chatbotCloseBtn = document.querySelector('.close-btn');
-// const apiKey = "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";
+const apiKey = "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";
 
 let userMessage;
 
+
 // Função para gerar a resposta da API
-// async function fetchChatGPTResponse(prompt) {
-//     try {
-//         const response = await fetch('https://api.openai.com/v1/chat/completions', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 'Authorization': `Bearer ${apiKey}`
-//             },
-//             body: JSON.stringify({
-//                 model: 'gpt-3.5-turbo',
-//                 messages: [{ role: 'user', content: userMessage }]
-//             })
-//         });
+async function fetchChatGPTResponse(prompt) {
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [{ role: 'user', content: userMessage }]
+            })
+        });
 
-//         if (!response.ok) {
-//             // Mostra o erro de resposta
-//             console.error('Erro na solicitação:', response.statusText);
-//             return "Erro ao obter a resposta. Tente novamente mais tarde.";
-//         }
+        if (!response.ok) {
+            // Mostra o erro de resposta
+            console.error('Erro na solicitação:', response.statusText);
+            return "Erro ao obter a resposta. Tente novamente mais tarde.";
+        }
 
-//         const data = await response.json();
-//         return data.choices[0].message.content;
-//     } catch (error) {
-//         console.error('Erro na solicitação:', error.message);
-//         return "Erro na solicitação. Tente novamente.";
-//     }
-// }
+        const data = await response.json();
+        return data.choices[0].message.content;
+    } catch (error) {
+        console.error('Erro na solicitação:', error.message);
+        return "Erro na solicitação. Tente novamente.";
+    }
+}
 
 const createChatLi = (message, className) => {
     const chatLi = document.createElement('li');
