@@ -9,11 +9,11 @@ import java.time.LocalDate;
 public class ChatbotProcesso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idProcesso;
 
     @ManyToOne
-    @JoinColumn(name = "funcionarioid", nullable = false)
-    private Funcionario funcionarioid;
+    @JoinColumn(name = "funcionario", nullable = false)
+    private Funcionario funcionario;
 
     private String tipoprocesso; //Solicitação de férias, justificativa, etc
     private LocalDate datasolicitacao;
@@ -22,20 +22,20 @@ public class ChatbotProcesso {
 
     //Getters e setters
 
-    public Long getId() {
-        return id;
+    public Long getIdProcesso() {
+        return idProcesso;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdProcesso(Long idProcesso) {
+        this.idProcesso = idProcesso;
     }
 
-    public Funcionario getFuncionarioid() {
-        return funcionarioid;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setFuncionarioid(Funcionario funcionarioid) {
-        this.funcionarioid = funcionarioid;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
     public String getTipoprocesso() {

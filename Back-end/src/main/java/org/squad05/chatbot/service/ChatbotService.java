@@ -2,7 +2,9 @@ package org.squad05.chatbot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
 import org.squad05.chatbot.models.ChatbotProcesso;
+import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.ChatbotRepository;
 
 import java.util.List;
@@ -12,9 +14,21 @@ public class ChatbotService {
     @Autowired
     private ChatbotRepository chatbotRepository;
 
+    @Autowired
+    private FuncionarioService funcionarioService;
+
     //Criar um processo
-    public ChatbotProcesso criarProcesso(ChatbotProcesso processo) {
-        return chatbotRepository.save(processo);
+    public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
+        Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getFuncionarioId());
+
+        ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
+        chatbotProcesso.setFuncionario(funcionario);
+        chatbotProcesso.setTipoprocesso(chatbotProcessoDTO.getTipoProcesso());
+        chatbotProcesso.setDatasolicitacao(chatbotProcessoDTO.getDataSolicitacao());
+        chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());;
+        chatbotProcesso.setDescricao(chatbotProcessoDTO.getDescricao());
+
+        return chatbotRepository.save(chatbotProcesso);
     }
 
     //Buscar processo por ID

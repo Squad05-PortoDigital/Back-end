@@ -3,6 +3,7 @@ package org.squad05.chatbot.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
 import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.service.ChatbotService;
 
@@ -16,7 +17,7 @@ public class ChatbotController {
 
     //Criar processo (CREATE)
     @PostMapping
-    public ResponseEntity<ChatbotProcesso> criarProcesso(@RequestBody ChatbotProcesso processo) {
+    public ResponseEntity<ChatbotProcesso> criarProcesso(@RequestBody ChatbotProcessoDTO processo) {
         ChatbotProcesso novoProcesso = chatbotService.criarProcesso(processo);
         return ResponseEntity.ok(novoProcesso);
     }
