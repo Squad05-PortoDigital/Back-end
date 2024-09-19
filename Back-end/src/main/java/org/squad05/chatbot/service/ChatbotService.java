@@ -23,8 +23,8 @@ public class ChatbotService {
 
         ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
         chatbotProcesso.setFuncionario(funcionario);
-        chatbotProcesso.setTipoprocesso(chatbotProcessoDTO.getTipoProcesso());
-        chatbotProcesso.setDatasolicitacao(chatbotProcessoDTO.getDataSolicitacao());
+        chatbotProcesso.setTipoProcesso(chatbotProcessoDTO.getTipoProcesso());
+        chatbotProcesso.setDataSolicitacao(chatbotProcessoDTO.getDataSolicitacao());
         chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());;
         chatbotProcesso.setDescricao(chatbotProcessoDTO.getDescricao());
 
@@ -38,10 +38,11 @@ public class ChatbotService {
     }
 
     //Atualizar um processo
-    public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcesso dadosAtualziados){
+    public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados){
         ChatbotProcesso processo = buscarProcessoPorId(id);
-        processo.setTipoprocesso(dadosAtualziados.getTipoprocesso());
-        processo.setDatasolicitacao(dadosAtualziados.getDatasolicitacao());
+
+        processo.setTipoProcesso(dadosAtualziados.getTipoProcesso());
+        processo.setDataSolicitacao(dadosAtualziados.getDataSolicitacao());
         processo.setStatus(dadosAtualziados.getStatus());
         processo.setDescricao(dadosAtualziados.getDescricao());
 

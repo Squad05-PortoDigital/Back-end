@@ -31,7 +31,7 @@ public class ChatbotController {
 
     //Atualizar processo (UPDATE)
     @PutMapping("/{id}")
-    public ResponseEntity<ChatbotProcesso> atualizarProcesso(@PathVariable Long id, @RequestBody ChatbotProcesso dadosAtualizados) {
+    public ResponseEntity<ChatbotProcesso> atualizarProcesso(@PathVariable Long id, @RequestBody ChatbotProcessoDTO dadosAtualizados) {
         ChatbotProcesso processoAtualizado = chatbotService.atualizarProcesso(id, dadosAtualizados);
         return ResponseEntity.ok(processoAtualizado);
     }

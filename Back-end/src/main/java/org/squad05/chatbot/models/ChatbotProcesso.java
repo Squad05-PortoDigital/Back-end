@@ -15,8 +15,8 @@ public class ChatbotProcesso {
     @JoinColumn(name = "funcionario", nullable = false)
     private Funcionario funcionario;
 
-    private String tipoprocesso; //Solicitação de férias, justificativa, etc
-    private LocalDate datasolicitacao;
+    private String tipoProcesso; //Solicitação de férias, justificativa, etc
+    private LocalDate dataSolicitacao;
     private String status;
     private String descricao;
 
@@ -38,20 +38,20 @@ public class ChatbotProcesso {
         this.funcionario = funcionario;
     }
 
-    public String getTipoprocesso() {
-        return tipoprocesso;
+    public String getTipoProcesso() {
+        return tipoProcesso;
     }
 
-    public void setTipoprocesso(String tipoprocesso) {
-        this.tipoprocesso = tipoprocesso;
+    public void setTipoProcesso(String tipoProcesso) {
+        this.tipoProcesso = tipoProcesso;
     }
 
-    public LocalDate getDatasolicitacao() {
-        return datasolicitacao;
+    public LocalDate getDataSolicitacao() {
+        return dataSolicitacao;
     }
 
-    public void setDatasolicitacao(LocalDate datasolicitacao) {
-        this.datasolicitacao = datasolicitacao;
+    public void setDataSolicitacao(LocalDate dataSolicitacao) {
+        this.dataSolicitacao = dataSolicitacao;
     }
 
     public String getStatus() {
