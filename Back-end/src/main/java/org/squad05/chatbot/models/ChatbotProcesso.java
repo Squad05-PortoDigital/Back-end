@@ -19,6 +19,9 @@ public class ChatbotProcesso {
     private LocalDate dataSolicitacao;
     private String status;
     private String descricao;
+    private String urgencia;
+    private Long responsavelId;
+
 
     //Getters e setters
 
@@ -68,5 +71,21 @@ public class ChatbotProcesso {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getUrgencia() {
+        return urgencia;
+    }
+
+    public void setUrgencia(String urgencia) {
+        this.urgencia = urgencia;
+    }
+
+    public Long getResponsavelId() {
+        return responsavelId;
+    }
+
+    public void setResponsavelId(Long responsavelId) {
+        this.responsavelId = responsavelId;
     }
 }

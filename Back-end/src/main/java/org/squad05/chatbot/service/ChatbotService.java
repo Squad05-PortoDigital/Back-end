@@ -27,6 +27,8 @@ public class ChatbotService {
         chatbotProcesso.setDataSolicitacao(chatbotProcessoDTO.getDataSolicitacao());
         chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());;
         chatbotProcesso.setDescricao(chatbotProcessoDTO.getDescricao());
+        chatbotProcesso.setUrgencia(chatbotProcessoDTO.getUrgencia());
+        chatbotProcesso.setResponsavelId(chatbotProcessoDTO.getResponsavelId());
 
         return chatbotRepository.save(chatbotProcesso);
     }
@@ -45,6 +47,8 @@ public class ChatbotService {
         processo.setDataSolicitacao(dadosAtualziados.getDataSolicitacao());
         processo.setStatus(dadosAtualziados.getStatus());
         processo.setDescricao(dadosAtualziados.getDescricao());
+        processo.setUrgencia(dadosAtualziados.getUrgencia());
+        processo.setResponsavelId(dadosAtualziados.getResponsavelId());
 
         return chatbotRepository.save(processo);
     }
