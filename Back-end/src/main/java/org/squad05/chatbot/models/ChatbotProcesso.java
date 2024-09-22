@@ -21,6 +21,7 @@ public class ChatbotProcesso {
     private String descricao;
     private String urgencia;
     private Long responsavelId;
+    private String caminhoArquivo;
 
 
     //Getters e setters
@@ -87,5 +88,13 @@ public class ChatbotProcesso {
 
     public void setResponsavelId(Long responsavelId) {
         this.responsavelId = responsavelId;
+    }
+
+    public String getCaminhoArquivo() {
+        return caminhoArquivo;
+    }
+
+    public void setCaminhoArquivo(String caminhoArquivo) {
+        this.caminhoArquivo = caminhoArquivo;
     }
 }
