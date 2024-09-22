@@ -17,10 +17,9 @@ public class ChatbotService {
     @Autowired
     private FuncionarioService funcionarioService;
 
-    //Criar ou atualizar um processo
+    //Criar um processo
     public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getFuncionarioId());
-        Funcionario funcionarioResponsavel = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getFuncionarioResponsavelId());
 
         ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
         chatbotProcesso.setFuncionario(funcionario);
@@ -28,9 +27,6 @@ public class ChatbotService {
         chatbotProcesso.setDataSolicitacao(chatbotProcessoDTO.getDataSolicitacao());
         chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());;
         chatbotProcesso.setDescricao(chatbotProcessoDTO.getDescricao());
-        chatbotProcesso.setUrgencia(chatbotProcessoDTO.getUrgencia());
-        chatbotProcesso.setArquivos(chatbotProcessoDTO.getArquivos());
-        chatbotProcesso.setFuncionarioResponsavel(funcionarioResponsavel);
 
         return chatbotRepository.save(chatbotProcesso);
     }
@@ -44,15 +40,11 @@ public class ChatbotService {
     //Atualizar um processo
     public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados){
         ChatbotProcesso processo = buscarProcessoPorId(id);
-        Funcionario funcionarioResponsavel = funcionarioService.buscarFuncionarioPorId(dadosAtualziados.getFuncionarioResponsavelId());
 
         processo.setTipoProcesso(dadosAtualziados.getTipoProcesso());
         processo.setDataSolicitacao(dadosAtualziados.getDataSolicitacao());
         processo.setStatus(dadosAtualziados.getStatus());
         processo.setDescricao(dadosAtualziados.getDescricao());
-        processo.setUrgencia(dadosAtualziados.getUrgencia());
-        processo.setArquivos(dadosAtualziados.getArquivos());
-        processo.setFuncionarioResponsavel(funcionarioResponsavel);
 
         return chatbotRepository.save(processo);
     }
