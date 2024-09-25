@@ -3,7 +3,6 @@ package org.squad05.chatbot.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
 import org.squad05.chatbot.models.ChatbotProcesso;
@@ -15,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ChatbotService {
@@ -38,16 +36,16 @@ public class ChatbotService {
 
     //Criar um processo
     public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
-        Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getFuncionarioId());
+        Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getId_funcionario());
 
         ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
-        chatbotProcesso.setFuncionario(funcionario);
-        chatbotProcesso.setTipoProcesso(chatbotProcessoDTO.getTipoProcesso());
-        chatbotProcesso.setDataSolicitacao(chatbotProcessoDTO.getDataSolicitacao());
+        chatbotProcesso.setId_funcionario(funcionario);
+        chatbotProcesso.setTipo_processo(chatbotProcessoDTO.getTipo_processo());
+        chatbotProcesso.setData_solicitacao(chatbotProcessoDTO.getData_solicitacao());
         chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());;
         chatbotProcesso.setDescricao(chatbotProcessoDTO.getDescricao());
         chatbotProcesso.setUrgencia(chatbotProcessoDTO.getUrgencia());
-        chatbotProcesso.setResponsavelId(chatbotProcessoDTO.getResponsavelId());
+        chatbotProcesso.setId_destinatario(chatbotProcessoDTO.getId_destinatario());
 
         return chatbotRepository.save(chatbotProcesso);
     }
@@ -62,12 +60,12 @@ public class ChatbotService {
     public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados){
         ChatbotProcesso processo = buscarProcessoPorId(id);
 
-        processo.setTipoProcesso(dadosAtualziados.getTipoProcesso());
-        processo.setDataSolicitacao(dadosAtualziados.getDataSolicitacao());
+        processo.setTipo_processo(dadosAtualziados.getTipo_processo());
+        processo.setData_solicitacao(dadosAtualziados.getData_solicitacao());
         processo.setStatus(dadosAtualziados.getStatus());
         processo.setDescricao(dadosAtualziados.getDescricao());
         processo.setUrgencia(dadosAtualziados.getUrgencia());
-        processo.setResponsavelId(dadosAtualziados.getResponsavelId());
+        processo.setId_destinatario(dadosAtualziados.getId_destinatario());
 
         return chatbotRepository.save(processo);
     }
@@ -93,7 +91,7 @@ public class ChatbotService {
         Files.write(filePath, file.getBytes());
 
         ChatbotProcesso processo = buscarProcessoPorId(processoId);
-        processo.setCaminhoArquivo(filePath.toString());
+        processo.setCaminho_arquivo(filePath.toString());
         chatbotRepository.save(processo);
 
         return "Arquivo enviado com sucesso: " + filePath.toString();

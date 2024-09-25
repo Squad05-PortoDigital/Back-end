@@ -9,53 +9,52 @@ import java.time.LocalDate;
 public class ChatbotProcesso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idProcesso;
+    private Long id_ocorrencia;
 
     @ManyToOne
-    @JoinColumn(name = "funcionario", nullable = false)
-    private Funcionario funcionario;
+    @JoinColumn(name = "id_funcionario", nullable = false)
+    private Funcionario id_funcionario;
 
-    private String tipoProcesso; //Solicitação de férias, justificativa, etc
-    private LocalDate dataSolicitacao;
+    private String tipo_processo; //Solicitação de férias, justificativa, etc
+    private LocalDate data_solicitacao;
     private String status;
     private String descricao;
     private String urgencia;
-    private Long responsavelId;
-    private String caminhoArquivo;
+    private Long id_destinatario;
+    private String caminho_arquivo;
 
 
     //Getters e setters
-
-    public Long getIdProcesso() {
-        return idProcesso;
+    public Long getId_ocorrencia() {
+        return id_ocorrencia;
     }
 
-    public void setIdProcesso(Long idProcesso) {
-        this.idProcesso = idProcesso;
+    public void setId_ocorrencia(Long id_ocorrencia) {
+        this.id_ocorrencia = id_ocorrencia;
     }
 
-    public Funcionario getFuncionario() {
-        return funcionario;
+    public Funcionario getId_funcionario() {
+        return id_funcionario;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
+    public void setId_funcionario(Funcionario id_funcionario) {
+        this.id_funcionario = id_funcionario;
     }
 
-    public String getTipoProcesso() {
-        return tipoProcesso;
+    public String getTipo_processo() {
+        return tipo_processo;
     }
 
-    public void setTipoProcesso(String tipoProcesso) {
-        this.tipoProcesso = tipoProcesso;
+    public void setTipo_processo(String tipo_processo) {
+        this.tipo_processo = tipo_processo;
     }
 
-    public LocalDate getDataSolicitacao() {
-        return dataSolicitacao;
+    public LocalDate getData_solicitacao() {
+        return data_solicitacao;
     }
 
-    public void setDataSolicitacao(LocalDate dataSolicitacao) {
-        this.dataSolicitacao = dataSolicitacao;
+    public void setData_solicitacao(LocalDate data_solicitacao) {
+        this.data_solicitacao = data_solicitacao;
     }
 
     public String getStatus() {
@@ -82,19 +81,19 @@ public class ChatbotProcesso {
         this.urgencia = urgencia;
     }
 
-    public Long getResponsavelId() {
-        return responsavelId;
+    public Long getId_destinatario() {
+        return id_destinatario;
     }
 
-    public void setResponsavelId(Long responsavelId) {
-        this.responsavelId = responsavelId;
+    public void setId_destinatario(Long id_destinatario) {
+        this.id_destinatario = id_destinatario;
     }
 
-    public String getCaminhoArquivo() {
-        return caminhoArquivo;
+    public String getCaminho_arquivo() {
+        return caminho_arquivo;
     }
 
-    public void setCaminhoArquivo(String caminhoArquivo) {
-        this.caminhoArquivo = caminhoArquivo;
+    public void setCaminho_arquivo(String caminho_arquivo) {
+        this.caminho_arquivo = caminho_arquivo;
     }
 }
