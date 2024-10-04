@@ -2,12 +2,14 @@ package org.squad05.chatbot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
 import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.ChatbotRepository;
+import org.squad05.chatbot.service.exceptions.DataBaseException;
 import org.squad05.chatbot.service.exceptions.ResourceNotFoundException;
 
 import java.io.IOException;
@@ -59,22 +61,33 @@ public class ChatbotService {
 
     //Atualizar um processo
     public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados){
-        ChatbotProcesso processo = buscarProcessoPorId(id);
-
-        processo.setTipo_processo(dadosAtualziados.getTipo_processo());
-        processo.setData_solicitacao(dadosAtualziados.getData_solicitacao());
-        processo.setStatus(dadosAtualziados.getStatus());
-        processo.setDescricao(dadosAtualziados.getDescricao());
-        processo.setUrgencia(dadosAtualziados.getUrgencia());
-        processo.setId_destinatario(dadosAtualziados.getId_destinatario());
-
-        return chatbotRepository.save(processo);
+        try {
+        	if(!chatbotRepository.existsById(id)) throw new ResourceNotFoundException(id);
+        	ChatbotProcesso processo = buscarProcessoPorId(id);
+        	processo.setTipo_processo(dadosAtualziados.getTipo_processo());
+        	processo.setData_solicitacao(dadosAtualziados.getData_solicitacao());
+        	processo.setStatus(dadosAtualziados.getStatus());
+        	processo.setDescricao(dadosAtualziados.getDescricao());
+        	processo.setUrgencia(dadosAtualziados.getUrgencia());
+        	processo.setId_destinatario(dadosAtualziados.getId_destinatario());
+        	
+        	return chatbotRepository.save(processo);
+        } catch (ResourceNotFoundException e) {
+        	throw new ResourceNotFoundException(id);
+        }
     }
 
     //Deletar um processo
     public void deletarProcesso(Long id) {
-        ChatbotProcesso processo = buscarProcessoPorId(id);
-        chatbotRepository.delete(processo);
+    	try {
+    		if (!chatbotRepository.existsById(id)) throw new ResourceNotFoundException(id);
+    		ChatbotProcesso processo = buscarProcessoPorId(id);
+    		chatbotRepository.delete(processo);   		
+    	} catch (ResourceNotFoundException e) {
+    		throw new ResourceNotFoundException(id);
+    	} catch (DataIntegrityViolationException e) {
+	    	throw new DataBaseException(e.getMessage());
+	    } 
     }
 
     //Listar todos os processos
