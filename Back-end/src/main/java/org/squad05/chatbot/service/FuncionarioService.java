@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.FuncionarioRepository;
+import org.squad05.chatbot.service.exceptions.ResourceNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FuncionarioService {
@@ -20,7 +22,7 @@ public class FuncionarioService {
     //Buscar funcionário por ID
     public Funcionario buscarFuncionarioPorId(Long id) {
         return funcionarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     //Atualizar um funcionário

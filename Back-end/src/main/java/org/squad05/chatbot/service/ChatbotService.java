@@ -8,6 +8,7 @@ import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
 import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.ChatbotRepository;
+import org.squad05.chatbot.service.exceptions.ResourceNotFoundException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,7 +54,7 @@ public class ChatbotService {
     //Buscar processo por ID
     public ChatbotProcesso buscarProcessoPorId(Long id) {
         return chatbotRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Processo não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     //Atualizar um processo
