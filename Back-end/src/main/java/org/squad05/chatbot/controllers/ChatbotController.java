@@ -1,18 +1,28 @@
 package org.squad05.chatbot.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
+import org.squad05.chatbot.DTOs.EmailDTO;
 import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.service.ChatbotService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/processos")
 public class ChatbotController {
+
     @Autowired
     private ChatbotService chatbotService;
 
@@ -44,19 +54,31 @@ public class ChatbotController {
         return ResponseEntity.noContent().build();
     }
 
-    //Listar todos os funcionários (READ)
+    //Listar todos os processos (READ)
     @GetMapping
     public ResponseEntity<List<ChatbotProcesso>> listarTodosProcessos() {
         List<ChatbotProcesso> processos = chatbotService.listarTodosProcessos();
         return ResponseEntity.ok(processos);
     }
 
+    //Enviar arquivo
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("processoId") Long processoId) {
         try {
             return chatbotService.enviarArquivo(file, processoId);
         } catch (Exception e) {
             return "Erro ao enviar o arquivo: " + e.getMessage();
+        }
+    }
+
+    //Enviar e-mail
+    @PostMapping("/send-email")
+    public ResponseEntity<String> enviarEmail(@RequestBody EmailDTO email) {
+        try {
+            chatbotService.enviarEmail(email.getDestinatario(), email.getAssunto(), email.getMensagem());
+            return ResponseEntity.ok("Email enviado com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro ao enviar o email: " + e.getMessage());
         }
     }
 
