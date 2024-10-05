@@ -1,22 +1,11 @@
-package org.squad05.chatbot.models;
-
-import jakarta.persistence.*;
+package org.squad05.chatbot.DTOs;
 
 import java.time.LocalDate;
 
-//CLASSE RESPONSÁVEL PELO MODELO DA TABELA CHATBOT
-@Entity
-@Table(name = "chatbot")
-public class ChatbotProcesso {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_ocorrencia;
-
-    @ManyToOne
-    @JoinColumn(name = "id_funcionario", nullable = false)
-    private Funcionario id_funcionario;
-
-    private String tipo_processo; //Solicitação de férias, justificativa, etc
+public class ChatbotOcorrenciaDTO {
+    //A CLASSE DTO É RESPONSÁVEL POR FORMATAR O JSON DO ENDPOINT.
+    private Long id_funcionario;
+    private String tipo_ocorrencia;
     private LocalDate data_solicitacao;
     private String status;
     private String descricao;
@@ -24,30 +13,21 @@ public class ChatbotProcesso {
     private Long id_destinatario;
     private String caminho_arquivo;
 
-
-    //Getters e setters
-    public Long getId_ocorrencia() {
-        return id_ocorrencia;
-    }
-
-    public void setId_ocorrencia(Long id_ocorrencia) {
-        this.id_ocorrencia = id_ocorrencia;
-    }
-
-    public Funcionario getId_funcionario() {
+    //Getters e Setters
+    public Long getId_funcionario() {
         return id_funcionario;
     }
 
-    public void setId_funcionario(Funcionario id_funcionario) {
+    public void setId_funcionario(Long id_funcionario) {
         this.id_funcionario = id_funcionario;
     }
 
-    public String getTipo_processo() {
-        return tipo_processo;
+    public String getTipo_ocorrencia() {
+        return tipo_ocorrencia;
     }
 
-    public void setTipo_processo(String tipo_processo) {
-        this.tipo_processo = tipo_processo;
+    public void setTipo_ocorrencia(String tipo_ocorrencia) {
+        this.tipo_ocorrencia = tipo_ocorrencia;
     }
 
     public LocalDate getData_solicitacao() {

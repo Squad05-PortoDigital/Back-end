@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
+import org.squad05.chatbot.DTOs.ChatbotOcorrenciaDTO;
 import org.squad05.chatbot.DTOs.EmailDTO;
-import org.squad05.chatbot.models.ChatbotProcesso;
+import org.squad05.chatbot.models.ChatbotOcorrencia;
 import org.squad05.chatbot.service.ChatbotService;
 
 @RestController
-@RequestMapping("/processos") //ENDPOINT DOS PROCESSOS
+@RequestMapping("/ocorrencias") //ENDPOINT DAS OCORRENCIAS
 public class ChatbotController {
 
     @Autowired
@@ -28,22 +28,22 @@ public class ChatbotController {
 
     //Criar processo (POST)
     @PostMapping
-    public ResponseEntity<ChatbotProcesso> criarProcesso(@RequestBody ChatbotProcessoDTO processo) {
-        ChatbotProcesso novoProcesso = chatbotService.criarProcesso(processo);
+    public ResponseEntity<ChatbotOcorrencia> criarProcesso(@RequestBody ChatbotOcorrenciaDTO processo) {
+        ChatbotOcorrencia novoProcesso = chatbotService.criarProcesso(processo);
         return ResponseEntity.ok(novoProcesso);
     }
 
     //Buscar processo by id (GETBYID)
     @GetMapping("/{id}")
-    public ResponseEntity<ChatbotProcesso> buscarProcessoPorId(@PathVariable Long id) {
-        ChatbotProcesso processo = chatbotService.buscarProcessoPorId(id);
+    public ResponseEntity<ChatbotOcorrencia> buscarProcessoPorId(@PathVariable Long id) {
+        ChatbotOcorrencia processo = chatbotService.buscarProcessoPorId(id);
         return ResponseEntity.ok(processo);
     }
 
     //Atualizar processo (UPDATE)
     @PutMapping("/{id}")
-    public ResponseEntity<ChatbotProcesso> atualizarProcesso(@PathVariable Long id, @RequestBody ChatbotProcessoDTO dadosAtualizados) {
-        ChatbotProcesso processoAtualizado = chatbotService.atualizarProcesso(id, dadosAtualizados);
+    public ResponseEntity<ChatbotOcorrencia> atualizarProcesso(@PathVariable Long id, @RequestBody ChatbotOcorrenciaDTO dadosAtualizados) {
+        ChatbotOcorrencia processoAtualizado = chatbotService.atualizarProcesso(id, dadosAtualizados);
         return ResponseEntity.ok(processoAtualizado);
     }
 
@@ -56,8 +56,8 @@ public class ChatbotController {
 
     //Listar todos os processos (GET)
     @GetMapping
-    public ResponseEntity<List<ChatbotProcesso>> listarTodosProcessos() {
-        List<ChatbotProcesso> processos = chatbotService.listarTodosProcessos();
+    public ResponseEntity<List<ChatbotOcorrencia>> listarTodosProcessos() {
+        List<ChatbotOcorrencia> processos = chatbotService.listarTodosProcessos();
         return ResponseEntity.ok(processos);
     }
 

@@ -19,8 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
-import org.squad05.chatbot.models.ChatbotProcesso;
+import org.squad05.chatbot.DTOs.ChatbotOcorrenciaDTO;
+import org.squad05.chatbot.models.ChatbotOcorrencia;
 import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.ChatbotRepository;
 
@@ -58,31 +58,31 @@ public class ChatbotService {
     }
 
     //Mapeamento para evitar repetição de código!
-    private void mapearDTOParaProcesso(ChatbotProcesso processo, ChatbotProcessoDTO processoDTO) {
-        processo.setTipo_processo(processoDTO.getTipo_processo());
+    private void mapearDTOParaProcesso(ChatbotOcorrencia processo, ChatbotOcorrenciaDTO processoDTO) {
+        processo.setTipo_ocorrencia(processoDTO.getTipo_ocorrencia());
         processo.setData_solicitacao(processoDTO.getData_solicitacao());
         processo.setStatus(processoDTO.getStatus());
         processo.setDescricao(processoDTO.getDescricao());
-        processo.setUrgencia(processo.getUrgencia());
+        processo.setUrgencia(processoDTO.getUrgencia());
         processo.setId_destinatario(processoDTO.getId_destinatario());
         processo.setCaminho_arquivo(processoDTO.getCaminho_arquivo());
     }
 
     //Criar um processo
-    public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
+    public ChatbotOcorrencia criarProcesso(ChatbotOcorrenciaDTO chatbotProcessoDTO) {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getId_funcionario());
 
-        ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
-        chatbotProcesso.setId_funcionario(funcionario);
+        ChatbotOcorrencia chatbotOcorrencia = new ChatbotOcorrencia();
+        chatbotOcorrencia.setId_funcionario(funcionario);
 
-        mapearDTOParaProcesso(chatbotProcesso, chatbotProcessoDTO);
+        mapearDTOParaProcesso(chatbotOcorrencia, chatbotProcessoDTO);
 
-        return chatbotRepository.save(chatbotProcesso);
+        return chatbotRepository.save(chatbotOcorrencia);
     }
 
     //Atualizar um processo
-    public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados) {
-        ChatbotProcesso processo = buscarProcessoPorId(id);
+    public ChatbotOcorrencia atualizarProcesso(Long id, ChatbotOcorrenciaDTO dadosAtualziados) {
+        ChatbotOcorrencia processo = buscarProcessoPorId(id);
 
         mapearDTOParaProcesso(processo,dadosAtualziados);
 
@@ -90,19 +90,19 @@ public class ChatbotService {
     }
 
     //Buscar processo por ID
-    public ChatbotProcesso buscarProcessoPorId(Long id) {
+    public ChatbotOcorrencia buscarProcessoPorId(Long id) {
         return chatbotRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Processo não encontrado"));
     }
 
     //Deletar um processo
     public void deletarProcesso(Long id) {
-        ChatbotProcesso processo = buscarProcessoPorId(id);
+        ChatbotOcorrencia processo = buscarProcessoPorId(id);
         chatbotRepository.delete(processo);
     }
 
     //Listar todos os processos
-    public List<ChatbotProcesso> listarTodosProcessos() {
+    public List<ChatbotOcorrencia> listarTodosProcessos() {
         return chatbotRepository.findAll();
     }
 
@@ -114,7 +114,7 @@ public class ChatbotService {
         Path filePath = Paths.get(uploadDir, file.getOriginalFilename());
         Files.write(filePath, file.getBytes());
 
-        ChatbotProcesso processo = buscarProcessoPorId(processoId);
+        ChatbotOcorrencia processo = buscarProcessoPorId(processoId);
         processo.setCaminho_arquivo(filePath.toString());
         chatbotRepository.save(processo);
 
