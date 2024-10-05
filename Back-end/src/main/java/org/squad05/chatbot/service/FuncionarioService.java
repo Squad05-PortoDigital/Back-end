@@ -1,9 +1,12 @@
 package org.squad05.chatbot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.FuncionarioRepository;
+import org.squad05.chatbot.service.exceptions.DataBaseException;
+import org.squad05.chatbot.service.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -20,24 +23,35 @@ public class FuncionarioService {
     //Buscar funcionário por ID
     public Funcionario buscarFuncionarioPorId(Long id) {
         return funcionarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     //Atualizar um funcionário
     public Funcionario atualizarFuncionario(Long id, Funcionario dadosAtualizados) {
-        Funcionario funcionario = buscarFuncionarioPorId(id);
-        funcionario.setNome(dadosAtualizados.getNome());
-        funcionario.setEmail(dadosAtualizados.getEmail());
-        funcionario.setSetor(dadosAtualizados.getSetor());
-        funcionario.setCargo(dadosAtualizados.getCargo());
-
-        return funcionarioRepository.save(funcionario);
+    	try {
+    			if (!funcionarioRepository.existsById(id)) throw new ResourceNotFoundException(id);
+    	        Funcionario funcionario = buscarFuncionarioPorId(id);
+    	        funcionario.setNome(dadosAtualizados.getNome());
+    	        funcionario.setEmail(dadosAtualizados.getEmail());
+    	        funcionario.setSetor(dadosAtualizados.getSetor());
+    	        funcionario.setCargo(dadosAtualizados.getCargo());
+    	        return funcionarioRepository.save(funcionario);	
+    	        
+    	} catch (ResourceNotFoundException e) {
+    		throw new ResourceNotFoundException(id);
+    	}
     }
 
     //Deletar um funcionário
     public void deletarFuncionario(Long id){
-        Funcionario funcionario = buscarFuncionarioPorId(id);
-        funcionarioRepository.delete(funcionario);
+    	try {
+    		if (!funcionarioRepository.existsById(id)) throw new ResourceNotFoundException(id);
+    		funcionarioRepository.deleteById(id);
+    	} catch (ResourceNotFoundException e) {
+    		throw new ResourceNotFoundException(id);
+    	} catch (DataIntegrityViolationException e) {
+	    	throw new DataBaseException(e.getMessage());
+	    }   
     }
 
     //Listar todos os funcionários
