@@ -1,5 +1,20 @@
 package org.squad05.chatbot.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,14 +27,9 @@ import org.squad05.chatbot.repositories.ChatbotRepository;
 import org.squad05.chatbot.service.exceptions.DataBaseException;
 import org.squad05.chatbot.service.exceptions.ResourceNotFoundException;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
 @Service
 public class ChatbotService {
+
     @Autowired
     private ChatbotRepository chatbotRepository;
 
@@ -28,6 +38,18 @@ public class ChatbotService {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
+
+    @Value("${email.host}")
+    private String host;
+
+    @Value("${email.user}")
+    private String user;
+
+    @Value("${email.password}")
+    private String password;
+
+    @Value("${email.port}")
+    private String port;
 
     public void init() {
         try {
@@ -45,7 +67,7 @@ public class ChatbotService {
         chatbotProcesso.setId_funcionario(funcionario);
         chatbotProcesso.setTipo_processo(chatbotProcessoDTO.getTipo_processo());
         chatbotProcesso.setData_solicitacao(chatbotProcessoDTO.getData_solicitacao());
-        chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());;
+        chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());
         chatbotProcesso.setDescricao(chatbotProcessoDTO.getDescricao());
         chatbotProcesso.setUrgencia(chatbotProcessoDTO.getUrgencia());
         chatbotProcesso.setId_destinatario(chatbotProcessoDTO.getId_destinatario());
@@ -75,7 +97,6 @@ public class ChatbotService {
         } catch (ResourceNotFoundException e) {
         	throw new ResourceNotFoundException(id);
         }
-    }
 
     //Deletar um processo
     public void deletarProcesso(Long id) {
@@ -109,5 +130,40 @@ public class ChatbotService {
         chatbotRepository.save(processo);
 
         return "Arquivo enviado com sucesso: " + filePath.toString();
+    }
+
+    //Envio de e-mail
+    public void enviarEmail(String to, String subject, String body) throws Exception {
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.port", port);
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // Criação da sessão de e-mail
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        });
+
+        try {
+            // Criação da mensagem de e-mail
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+            message.setSubject(subject);
+            message.setText(body);
+
+            // Envio da mensagem
+            Transport.send(message);
+
+            System.out.println("E-mail enviado com sucesso!");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }
