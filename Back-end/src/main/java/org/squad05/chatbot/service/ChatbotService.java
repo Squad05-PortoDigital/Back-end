@@ -36,6 +36,7 @@ public class ChatbotService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
+    //Configurações da funão de e-mail
     @Value("${email.host}")
     private String host;
 
@@ -56,40 +57,42 @@ public class ChatbotService {
         }
     }
 
+    //Mapeamento para evitar repetição de código!
+    private void mapearDTOParaProcesso(ChatbotProcesso processo, ChatbotProcessoDTO processoDTO) {
+        processo.setTipo_processo(processoDTO.getTipo_processo());
+        processo.setData_solicitacao(processoDTO.getData_solicitacao());
+        processo.setStatus(processoDTO.getStatus());
+        processo.setDescricao(processoDTO.getDescricao());
+        processo.setUrgencia(processo.getUrgencia());
+        processo.setId_destinatario(processoDTO.getId_destinatario());
+        processo.setCaminho_arquivo(processoDTO.getCaminho_arquivo());
+    }
+
     //Criar um processo
     public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getId_funcionario());
 
         ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
         chatbotProcesso.setId_funcionario(funcionario);
-        chatbotProcesso.setTipo_processo(chatbotProcessoDTO.getTipo_processo());
-        chatbotProcesso.setData_solicitacao(chatbotProcessoDTO.getData_solicitacao());
-        chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());
-        chatbotProcesso.setDescricao(chatbotProcessoDTO.getDescricao());
-        chatbotProcesso.setUrgencia(chatbotProcessoDTO.getUrgencia());
-        chatbotProcesso.setId_destinatario(chatbotProcessoDTO.getId_destinatario());
+
+        mapearDTOParaProcesso(chatbotProcesso, chatbotProcessoDTO);
 
         return chatbotRepository.save(chatbotProcesso);
-    }
-
-    //Buscar processo por ID
-    public ChatbotProcesso buscarProcessoPorId(Long id) {
-        return chatbotRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Processo não encontrado"));
     }
 
     //Atualizar um processo
     public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados) {
         ChatbotProcesso processo = buscarProcessoPorId(id);
 
-        processo.setTipo_processo(dadosAtualziados.getTipo_processo());
-        processo.setData_solicitacao(dadosAtualziados.getData_solicitacao());
-        processo.setStatus(dadosAtualziados.getStatus());
-        processo.setDescricao(dadosAtualziados.getDescricao());
-        processo.setUrgencia(dadosAtualziados.getUrgencia());
-        processo.setId_destinatario(dadosAtualziados.getId_destinatario());
+        mapearDTOParaProcesso(processo,dadosAtualziados);
 
         return chatbotRepository.save(processo);
+    }
+
+    //Buscar processo por ID
+    public ChatbotProcesso buscarProcessoPorId(Long id) {
+        return chatbotRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Processo não encontrado"));
     }
 
     //Deletar um processo
