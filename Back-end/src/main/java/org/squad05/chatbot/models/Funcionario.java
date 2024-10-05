@@ -2,6 +2,7 @@ package org.squad05.chatbot.models;
 
 import jakarta.persistence.*;
 
+//CLASSE RESPONSÁVEL PELO MODELO DA TABELA FUNCIONÁRIO
 @Entity
 @Table(name = "funcionarios")
 public class Funcionario {

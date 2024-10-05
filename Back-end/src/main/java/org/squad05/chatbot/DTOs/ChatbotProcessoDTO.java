@@ -3,6 +3,7 @@ package org.squad05.chatbot.DTOs;
 import java.time.LocalDate;
 
 public class ChatbotProcessoDTO {
+    //A CLASSE DTO É RESPONSÁVEL POR FORMATAR O JSON DO ENDPOINT.
     private Long id_funcionario;
     private String tipo_processo;
     private LocalDate data_solicitacao;
@@ -13,7 +14,6 @@ public class ChatbotProcessoDTO {
     private String caminho_arquivo;
 
     //Getters e Setters
-
     public Long getId_funcionario() {
         return id_funcionario;
     }

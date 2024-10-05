@@ -1,7 +1,7 @@
 package org.squad05.chatbot.DTOs;
 
 public class EmailDTO {
-
+    //A CLASSE DTO É RESPONSÁVEL POR FORMATAR O JSON DO ENDPOINT.
     private String destinatario;
     private String assunto;
     private String mensagem;

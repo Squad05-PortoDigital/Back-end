@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+//CLASSE RESPONSÁVEL PELO MODELO DA TABELA CHATBOT
 @Entity
 @Table(name = "chatbot")
 public class ChatbotProcesso {

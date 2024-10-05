@@ -9,19 +9,19 @@ import org.squad05.chatbot.service.FuncionarioService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/funcionarios")
+@RequestMapping("/funcionarios") //ENDPOINT DOS FUNCIONÁRIOS
 public class FuncionarioController {
     @Autowired
     private FuncionarioService funcionarioService;
 
-    //Criar funcionário (CREATE)
+    //Criar funcionário (POST)
     @PostMapping
     public ResponseEntity<Funcionario> criarFuncionario(@RequestBody Funcionario funcionario) {
         Funcionario novoFuncionario = funcionarioService.criarFuncionario(funcionario);
         return ResponseEntity.ok(novoFuncionario);
     }
 
-    //Get funcionario by id (GETBYID)
+    //Buscar funcionario por id (GETBYID)
     @GetMapping("/{id}")
     public ResponseEntity<Funcionario> buscarFuncionarioPorId(@PathVariable Long id) {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(id);
@@ -42,7 +42,7 @@ public class FuncionarioController {
         return ResponseEntity.noContent().build();
     }
 
-    //Listar todos os funcionários (READ)
+    //Listar todos os funcionários (GET)
     @GetMapping
     public ResponseEntity<List<Funcionario>> listarTodosFuncionarios() {
         List<Funcionario> funcionarios = funcionarioService.listarTodosFuncionarios();

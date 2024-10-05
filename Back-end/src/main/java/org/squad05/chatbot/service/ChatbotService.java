@@ -36,7 +36,7 @@ public class ChatbotService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    //Configurações da funão de e-mail
+    //Configurações da função de e-mail
     @Value("${email.host}")
     private String host;
 
@@ -108,7 +108,6 @@ public class ChatbotService {
 
     //Upload de arquvios
     public String enviarArquivo(MultipartFile file, Long processoId) throws Exception {
-
         //Cria o diretório se não existir
         Files.createDirectories(Paths.get(uploadDir));
         //Salvando o arquivo no sistema

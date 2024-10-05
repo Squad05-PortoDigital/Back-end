@@ -20,20 +20,20 @@ import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.service.ChatbotService;
 
 @RestController
-@RequestMapping("/processos")
+@RequestMapping("/processos") //ENDPOINT DOS PROCESSOS
 public class ChatbotController {
 
     @Autowired
     private ChatbotService chatbotService;
 
-    //Criar processo (CREATE)
+    //Criar processo (POST)
     @PostMapping
     public ResponseEntity<ChatbotProcesso> criarProcesso(@RequestBody ChatbotProcessoDTO processo) {
         ChatbotProcesso novoProcesso = chatbotService.criarProcesso(processo);
         return ResponseEntity.ok(novoProcesso);
     }
 
-    //Get processo by id (GETBYID)
+    //Buscar processo by id (GETBYID)
     @GetMapping("/{id}")
     public ResponseEntity<ChatbotProcesso> buscarProcessoPorId(@PathVariable Long id) {
         ChatbotProcesso processo = chatbotService.buscarProcessoPorId(id);
@@ -54,14 +54,14 @@ public class ChatbotController {
         return ResponseEntity.noContent().build();
     }
 
-    //Listar todos os processos (READ)
+    //Listar todos os processos (GET)
     @GetMapping
     public ResponseEntity<List<ChatbotProcesso>> listarTodosProcessos() {
         List<ChatbotProcesso> processos = chatbotService.listarTodosProcessos();
         return ResponseEntity.ok(processos);
     }
 
-    //Enviar arquivo
+    //Enviar arquivo - NÃO FINALIZADA.
     @PostMapping("/upload")
     public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("processoId") Long processoId) {
         try {
