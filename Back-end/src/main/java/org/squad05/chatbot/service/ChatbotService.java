@@ -82,21 +82,22 @@ public class ChatbotService {
     }
 
     //Atualizar um processo
-    public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados){
+    public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados) {
         try {
-        	if(!chatbotRepository.existsById(id)) throw new ResourceNotFoundException(id);
-        	ChatbotProcesso processo = buscarProcessoPorId(id);
-        	processo.setTipo_processo(dadosAtualziados.getTipo_processo());
-        	processo.setData_solicitacao(dadosAtualziados.getData_solicitacao());
-        	processo.setStatus(dadosAtualziados.getStatus());
-        	processo.setDescricao(dadosAtualziados.getDescricao());
-        	processo.setUrgencia(dadosAtualziados.getUrgencia());
-        	processo.setId_destinatario(dadosAtualziados.getId_destinatario());
-        	
-        	return chatbotRepository.save(processo);
+            if (!chatbotRepository.existsById(id)) throw new ResourceNotFoundException(id);
+            ChatbotProcesso processo = buscarProcessoPorId(id);
+            processo.setTipo_processo(dadosAtualziados.getTipo_processo());
+            processo.setData_solicitacao(dadosAtualziados.getData_solicitacao());
+            processo.setStatus(dadosAtualziados.getStatus());
+            processo.setDescricao(dadosAtualziados.getDescricao());
+            processo.setUrgencia(dadosAtualziados.getUrgencia());
+            processo.setId_destinatario(dadosAtualziados.getId_destinatario());
+
+            return chatbotRepository.save(processo);
         } catch (ResourceNotFoundException e) {
-        	throw new ResourceNotFoundException(id);
+            throw new ResourceNotFoundException(id);
         }
+    }
 
     //Deletar um processo
     public void deletarProcesso(Long id) {
