@@ -1,11 +1,19 @@
 package org.squad05.chatbot.controllers;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -92,6 +100,40 @@ public class ChatbotController {
         } catch (IOException ex) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/download/{fileName:.+}")
+    public ResponseEntity<Resource> baixarArquivo(@PathVariable String fileName, HttpServletRequest request) throws IOException {
+        Path filePath = fileStorageLocation.resolve(fileName).normalize();
+
+        try {
+            Resource resource = new UrlResource(filePath.toUri());
+            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +
+                            resource.getFilename() + "\"")
+                    .body(resource);
+
+        } catch (MalformedURLException e) {
+            return ResponseEntity.badRequest().build();
+
+        }
+    }
+
+    @GetMapping("/files-list")
+    public ResponseEntity<List<String>> listarArquivos() throws IOException {
+        List<String> fileNames = Files.list(fileStorageLocation)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(fileNames);
     }
 
 
