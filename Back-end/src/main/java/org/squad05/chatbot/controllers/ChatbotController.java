@@ -1,9 +1,13 @@
 package org.squad05.chatbot.controllers;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
 import org.squad05.chatbot.DTOs.EmailDTO;
+import org.squad05.chatbot.configurations.FileStorageProperties;
 import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.service.ChatbotService;
 
@@ -23,8 +29,16 @@ import org.squad05.chatbot.service.ChatbotService;
 @RequestMapping("/processos")
 public class ChatbotController {
 
+    private final Path fileStorageLocation;
+
+    public ChatbotController(FileStorageProperties fileStorageProperties) {
+        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
+                .toAbsolutePath().normalize();
+    }
+
     @Autowired
     private ChatbotService chatbotService;
+
 
     //Criar processo (CREATE)
     @PostMapping
@@ -59,6 +73,25 @@ public class ChatbotController {
     public ResponseEntity<List<ChatbotProcesso>> listarTodosProcessos() {
         List<ChatbotProcesso> processos = chatbotService.listarTodosProcessos();
         return ResponseEntity.ok(processos);
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> enviarArquivo(@RequestParam("file")MultipartFile file) {
+        String nomeArquivo = StringUtils.cleanPath(file.getOriginalFilename());
+
+        try {
+            Path targetLocation = fileStorageLocation.resolve(nomeArquivo);
+            file.transferTo(targetLocation);
+
+            String arquivoDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/processos/download/")
+                    .path(nomeArquivo)
+                    .toUriString();
+
+            return ResponseEntity.ok("Upload completed! Download link: " + arquivoDownloadUri);
+        } catch (IOException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 
