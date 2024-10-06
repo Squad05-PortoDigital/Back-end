@@ -1,11 +1,13 @@
 package org.squad05.chatbot.service;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -15,12 +17,23 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
+import org.squad05.chatbot.configurations.FileStorageProperties;
 import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.ChatbotRepository;
@@ -47,6 +60,15 @@ public class ChatbotService {
 
     @Value("${email.port}")
     private String port;
+
+    private final Path fileStorageLocation;
+
+    //Construtor de arquivos
+    @Autowired
+    public ChatbotService(FileStorageProperties fileStorageProperties) {
+        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
+                .toAbsolutePath().normalize();
+    }
 
 
     //Criar um processo
@@ -107,7 +129,6 @@ public class ChatbotService {
         return chatbotRepository.findAll();
     }
 
-
     //Envio de e-mail
     public void enviarEmail(String to, String subject, String body) throws Exception {
 
@@ -141,5 +162,50 @@ public class ChatbotService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    //Upload de arquivos
+    public String enviarArquivo(MultipartFile file) {
+        String nomeArquivo = StringUtils.cleanPath(file.getOriginalFilename());
+
+        try {
+            Path targetLocation = fileStorageLocation.resolve(nomeArquivo);
+            file.transferTo(targetLocation);
+
+            return ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/processos/download/")
+                    .path(nomeArquivo)
+                    .toUriString();
+
+        } catch (IOException ex) {
+            throw new RuntimeException("Não foi possível armazenar o arquivo " +
+                    nomeArquivo + ". Por favor, tente novamente!", ex);
+        }
+    }
+
+    //Download de arquivos
+    public Resource baixarArquivo(String fileName) {
+        try {
+            Path filePath = fileStorageLocation.resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Arquivo não encontrado" + fileName);
+            }
+
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException("Arquivo não encontrado " + fileName, ex);
+        }
+    }
+
+    //Listar todos os arquivos presentes
+    public List<String> listarArquivos() throws IOException {
+        return Files.list(fileStorageLocation)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .collect(Collectors.toList());
+
     }
 }

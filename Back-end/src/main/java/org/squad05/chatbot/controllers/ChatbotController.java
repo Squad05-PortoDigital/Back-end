@@ -37,25 +37,17 @@ import org.squad05.chatbot.service.ChatbotService;
 @RequestMapping("/processos")
 public class ChatbotController {
 
-    private final Path fileStorageLocation;
-
-    public ChatbotController(FileStorageProperties fileStorageProperties) {
-        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
-                .toAbsolutePath().normalize();
-    }
-
     @Autowired
     private ChatbotService chatbotService;
 
-
-    //Criar processo (CREATE)
+    //Criar processo (POST)
     @PostMapping
     public ResponseEntity<ChatbotProcesso> criarProcesso(@RequestBody ChatbotProcessoDTO processo) {
         ChatbotProcesso novoProcesso = chatbotService.criarProcesso(processo);
         return ResponseEntity.ok(novoProcesso);
     }
 
-    //Get processo by id (GETBYID)
+    //Buscar processo por ID (GETBYID)
     @GetMapping("/{id}")
     public ResponseEntity<ChatbotProcesso> buscarProcessoPorId(@PathVariable Long id) {
         ChatbotProcesso processo = chatbotService.buscarProcessoPorId(id);
@@ -76,66 +68,45 @@ public class ChatbotController {
         return ResponseEntity.noContent().build();
     }
 
-    //Listar todos os processos (READ)
+    //Listar todos os processos (GET)
     @GetMapping
     public ResponseEntity<List<ChatbotProcesso>> listarTodosProcessos() {
         List<ChatbotProcesso> processos = chatbotService.listarTodosProcessos();
         return ResponseEntity.ok(processos);
     }
 
+    //Upload de arquivo (POST)
     @PostMapping("/upload")
     public ResponseEntity<String> enviarArquivo(@RequestParam("file")MultipartFile file) {
-        String nomeArquivo = StringUtils.cleanPath(file.getOriginalFilename());
-
-        try {
-            Path targetLocation = fileStorageLocation.resolve(nomeArquivo);
-            file.transferTo(targetLocation);
-
-            String arquivoDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/processos/download/")
-                    .path(nomeArquivo)
-                    .toUriString();
-
-            return ResponseEntity.ok("Upload completed! Download link: " + arquivoDownloadUri);
-        } catch (IOException ex) {
-            return ResponseEntity.badRequest().build();
-        }
+        String downloadUri = chatbotService.enviarArquivo(file);
+        return ResponseEntity.ok("Upload realizado! Download link: " + downloadUri);
     }
 
+    //Download de arquivo (GET)
     @GetMapping("/download/{fileName:.+}")
-    public ResponseEntity<Resource> baixarArquivo(@PathVariable String fileName, HttpServletRequest request) throws IOException {
-        Path filePath = fileStorageLocation.resolve(fileName).normalize();
+    public ResponseEntity<Resource> baixarArquivo(@PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = chatbotService.baixarArquivo(fileName);
 
+        //Determina o tipo de arquivo
+        String contentType;
         try {
-            Resource resource = new UrlResource(filePath.toUri());
-            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-            }
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" +
-                            resource.getFilename() + "\"")
-                    .body(resource);
-
-        } catch (MalformedURLException e) {
-            return ResponseEntity.badRequest().build();
-
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            contentType = "application/octet-stream";
         }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 
+    //Listar arquivos (GET)
     @GetMapping("/files-list")
     public ResponseEntity<List<String>> listarArquivos() throws IOException {
-        List<String> fileNames = Files.list(fileStorageLocation)
-                .map(Path::getFileName)
-                .map(Path::toString)
-                .collect(Collectors.toList());
-
+        List<String> fileNames = chatbotService.listarArquivos();
         return ResponseEntity.ok(fileNames);
     }
-
 
     //Enviar e-mail
     @PostMapping("/send-email")
