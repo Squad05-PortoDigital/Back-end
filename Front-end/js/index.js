@@ -50,7 +50,7 @@ const handleChat = () => {
 
         switch (userMessage) {
             case '1':
-                chatBox.appendChild(createChatLi("Para justificar sua falta, por favor, informe seu nome.", "incoming"));
+                chatBox.appendChild(createChatLi("Para justificar sua falta, por favor, informe seu nome completo.", "incoming"));
                 break;
             case '2':
                 chatBox.appendChild(createChatLi("Para solicitar horas extras, informe seu nome.", "incoming"));
@@ -66,15 +66,17 @@ const handleChat = () => {
     else if (userName === "" && userMessage.length > 0) {
         chatBox.appendChild(createChatLi(userMessage, "outgoing"));
         userName = userMessage;
-        chatBox.appendChild(createChatLi(`Obrigado, ${userName}! Agora, por favor, informe sua matrícula.`, "incoming"));
+        const firstName = userName.split(" ")[0];
+        chatBox.appendChild(createChatLi(`Obrigado, ${firstName}! Agora, por favor, informe sua matrícula.`, "incoming"));
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
     }
 
-    else if (userName !== "" && userRegistration === "" && userMessage.length > 0) { 
+    else if (userName !== "" && userRegistration === "" && userMessage.length > 0) {
         userRegistration = userMessage;
+        const firstName = userName.split(" ")[0];
         chatBox.appendChild(createChatLi(userMessage, "outgoing"));
-        chatBox.appendChild(createChatLi(`Obrigado, ${userName}! Sua matrícula é ${userRegistration}. Agora, por favor, informe a data da falta (formato: YYYY-MM-DD).`, "incoming"));
+        chatBox.appendChild(createChatLi(`Obrigado, ${firstName}! Sua matrícula é ${userRegistration}. Agora, por favor, informe a data da falta (formato: YYYY-MM-DD).`, "incoming"));
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
     }
