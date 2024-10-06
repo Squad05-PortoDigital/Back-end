@@ -61,15 +61,6 @@ public class ChatbotController {
         return ResponseEntity.ok(processos);
     }
 
-    //Enviar arquivo
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("processoId") Long processoId) {
-        try {
-            return chatbotService.enviarArquivo(file, processoId);
-        } catch (Exception e) {
-            return "Erro ao enviar o arquivo: " + e.getMessage();
-        }
-    }
 
     //Enviar e-mail
     @PostMapping("/send-email")

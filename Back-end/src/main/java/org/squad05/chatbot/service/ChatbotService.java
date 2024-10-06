@@ -36,9 +36,6 @@ public class ChatbotService {
     @Autowired
     private FuncionarioService funcionarioService;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
-
     @Value("${email.host}")
     private String host;
 
@@ -51,13 +48,6 @@ public class ChatbotService {
     @Value("${email.port}")
     private String port;
 
-    public void init() {
-        try {
-            Files.createDirectories(Paths.get(uploadDir));
-        } catch (IOException e) {
-            throw new RuntimeException("Não foi possível criar o diretório de arquivos.");
-        }
-    }
 
     //Criar um processo
     public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
@@ -117,21 +107,6 @@ public class ChatbotService {
         return chatbotRepository.findAll();
     }
 
-    //Upload de arquvios
-    public String enviarArquivo(MultipartFile file, Long processoId) throws Exception {
-
-        //Cria o diretório se não existir
-        Files.createDirectories(Paths.get(uploadDir));
-        //Salvando o arquivo no sistema
-        Path filePath = Paths.get(uploadDir, file.getOriginalFilename());
-        Files.write(filePath, file.getBytes());
-
-        ChatbotProcesso processo = buscarProcessoPorId(processoId);
-        processo.setCaminho_arquivo(filePath.toString());
-        chatbotRepository.save(processo);
-
-        return "Arquivo enviado com sucesso: " + filePath.toString();
-    }
 
     //Envio de e-mail
     public void enviarEmail(String to, String subject, String body) throws Exception {
