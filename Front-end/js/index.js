@@ -54,9 +54,25 @@ function handleMessageFirst(options) {
 function handleMsgChoiceUser(options) {
     const values = Object.keys(options);
     values.forEach(key => {
-        chatBox.appendChild(createChatLi(`${key}. ${options[key]}`, "incoming")); 
+        chatBox.appendChild(createChatLi(`${key}. ${options[key]}`, "incoming"));
+        console.log(options[key]);
     });
 }
+
+// function analyseChoice(options) {
+//     const values = Object.keys(options);
+//     // const firstKey = values[0];
+//     // const secondKey = values[1];
+
+//     // const responseOne = options[firstKey].toLowerCase().trim();
+//     // const responseTwo = options[secondKey].toLowerCase().trim();
+
+//     // if(responseOne) {
+//     //     console.log('Sim Ok...')
+//     // } else {
+//     //     console.log('Não ok...')
+//     // }
+// }
 
 handleMessageFirst(options);
 
@@ -83,7 +99,6 @@ const resetForm = () => {
 
 const handleChat = () => {
     const userMessage = chatInput.value.trim();
-
     // Verificação da seleção de opção
     if (!isNaN(parseInt(userMessage, 10)) && options[userMessage]) {
         chatBox.appendChild(createChatLi(userMessage, "outgoing"));
@@ -91,8 +106,9 @@ const handleChat = () => {
         chatBox.scrollTo(0, chatBox.scrollHeight);
 
         selectedOption = userMessage;
+        selectedChoice = userMessage;
 
-        switch (userMessage) {
+        switch (selectedOption) {
             case '1':
                 chatBox.appendChild(createChatLi("Para justificar sua falta, por favor, informe seu nome completo.", "incoming"));
                 break;
@@ -159,12 +175,11 @@ const handleChat = () => {
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
         chatBox.appendChild(createChatLi("Você possui um atestado médico?", "incoming"));
-        handleMsgChoiceUser(choiceUser);
         // chatBox.appendChild(createChatLi("Selecione uma nova opção:", "incoming"));
         // handleMessageFirst(options); // Exibe o menu de opções
-        resetForm();
+        handleMsgChoiceUser(choiceUser);
     }
-
+    
     // Verificação para horas extras
     else if (selectedOption === '2' && userRegistration !== "" && userMessage.length > 0) {
         const hoursPattern = /^\d+$/; // Verifica se a entrada é um número
