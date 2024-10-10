@@ -17,19 +17,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
@@ -165,12 +159,18 @@ public class ChatbotService {
     }
 
     //Upload de arquivos
-    public String enviarArquivo(MultipartFile file) {
+    public String enviarArquivo(MultipartFile file, Long processoId) {
         String nomeArquivo = StringUtils.cleanPath(file.getOriginalFilename());
 
         try {
+            //Salvando o arquivo fisicamente
             Path targetLocation = fileStorageLocation.resolve(nomeArquivo);
             file.transferTo(targetLocation);
+
+            ChatbotProcesso processo = buscarProcessoPorId(processoId);
+
+            processo.setCaminho_arquivo(nomeArquivo);//Associa o arquivo ao processo
+            chatbotRepository.save(processo);
 
             return ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/processos/download/")
