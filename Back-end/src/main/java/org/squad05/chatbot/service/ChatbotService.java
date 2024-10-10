@@ -159,7 +159,7 @@ public class ChatbotService {
     }
 
     //Upload de arquivos
-    public String enviarArquivo(MultipartFile file, Long processoId) {
+    public String enviarArquivo(MultipartFile file, Long ocorrenciaId) {
         String nomeArquivo = StringUtils.cleanPath(file.getOriginalFilename());
 
         //Verificando o tipo de arquivo:
@@ -173,7 +173,7 @@ public class ChatbotService {
             Path targetLocation = fileStorageLocation.resolve(nomeArquivo);
             file.transferTo(targetLocation);
 
-            ChatbotProcesso processo = buscarProcessoPorId(processoId);
+            ChatbotProcesso processo = buscarProcessoPorId(ocorrenciaId);
 
             processo.setCaminho_arquivo(nomeArquivo);//Associa o arquivo ao processo
             chatbotRepository.save(processo);
