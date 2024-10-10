@@ -64,6 +64,15 @@ public class ChatbotService {
                 .toAbsolutePath().normalize();
     }
 
+    //Método para mapear o DTO para ChatbotProcesso
+    private void mapearProcesso(ChatbotProcesso processo, ChatbotProcessoDTO dto) {
+        processo.setTipo_processo(dto.getTipo_processo());
+        processo.setData_solicitacao(dto.getData_solicitacao());
+        processo.setStatus(dto.getStatus());
+        processo.setDescricao(dto.getDescricao());
+        processo.setUrgencia(dto.getUrgencia());
+        processo.setId_destinatario(dto.getId_destinatario());
+    }
 
     //Criar um processo
     public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
@@ -71,12 +80,7 @@ public class ChatbotService {
 
         ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
         chatbotProcesso.setId_funcionario(funcionario);
-        chatbotProcesso.setTipo_processo(chatbotProcessoDTO.getTipo_processo());
-        chatbotProcesso.setData_solicitacao(chatbotProcessoDTO.getData_solicitacao());
-        chatbotProcesso.setStatus(chatbotProcessoDTO.getStatus());
-        chatbotProcesso.setDescricao(chatbotProcessoDTO.getDescricao());
-        chatbotProcesso.setUrgencia(chatbotProcessoDTO.getUrgencia());
-        chatbotProcesso.setId_destinatario(chatbotProcessoDTO.getId_destinatario());
+        mapearProcesso(chatbotProcesso, chatbotProcessoDTO);
 
         return chatbotRepository.save(chatbotProcesso);
     }
@@ -91,15 +95,10 @@ public class ChatbotService {
     public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados) {
         try {
             if (!chatbotRepository.existsById(id)) throw new ResourceNotFoundException(id);
-            ChatbotProcesso processo = buscarProcessoPorId(id);
-            processo.setTipo_processo(dadosAtualziados.getTipo_processo());
-            processo.setData_solicitacao(dadosAtualziados.getData_solicitacao());
-            processo.setStatus(dadosAtualziados.getStatus());
-            processo.setDescricao(dadosAtualziados.getDescricao());
-            processo.setUrgencia(dadosAtualziados.getUrgencia());
-            processo.setId_destinatario(dadosAtualziados.getId_destinatario());
-
-            return chatbotRepository.save(processo);
+            ChatbotProcesso chatbotProcesso = buscarProcessoPorId(id);
+            mapearProcesso(chatbotProcesso, dadosAtualziados);
+            
+            return chatbotRepository.save(chatbotProcesso);
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
