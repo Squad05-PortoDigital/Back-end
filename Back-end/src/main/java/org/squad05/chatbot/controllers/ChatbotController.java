@@ -1,8 +1,13 @@
 package org.squad05.chatbot.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +31,14 @@ public class ChatbotController {
     @Autowired
     private ChatbotService chatbotService;
 
-    //Criar processo (CREATE)
+    //Criar processo (POST)
     @PostMapping
     public ResponseEntity<ChatbotProcesso> criarProcesso(@RequestBody ChatbotProcessoDTO processo) {
         ChatbotProcesso novoProcesso = chatbotService.criarProcesso(processo);
         return ResponseEntity.ok(novoProcesso);
     }
 
-    //Get processo by id (GETBYID)
+    //Buscar processo por ID (GETBYID)
     @GetMapping("/{id}")
     public ResponseEntity<ChatbotProcesso> buscarProcessoPorId(@PathVariable Long id) {
         ChatbotProcesso processo = chatbotService.buscarProcessoPorId(id);
@@ -54,21 +59,45 @@ public class ChatbotController {
         return ResponseEntity.noContent().build();
     }
 
-    //Listar todos os processos (READ)
+    //Listar todos os processos (GET)
     @GetMapping
     public ResponseEntity<List<ChatbotProcesso>> listarTodosProcessos() {
         List<ChatbotProcesso> processos = chatbotService.listarTodosProcessos();
         return ResponseEntity.ok(processos);
     }
 
-    //Enviar arquivo
+    //Upload de arquivo (POST)
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("processoId") Long processoId) {
+    public ResponseEntity<String> enviarArquivo(@RequestParam("file")MultipartFile file,
+                                                @RequestParam("processoId") Long ocorrenciaId) {
+        String downloadUri = chatbotService.enviarArquivo(file, ocorrenciaId);
+        return ResponseEntity.ok("Upload realizado! Download link: " + downloadUri);
+    }
+
+    //Download de arquivo (GET)
+    @GetMapping("/download/{fileName:.+}")
+    public ResponseEntity<Resource> baixarArquivo(@PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = chatbotService.baixarArquivo(fileName);
+
+        //Determina o tipo de arquivo
+        String contentType;
         try {
-            return chatbotService.enviarArquivo(file, processoId);
-        } catch (Exception e) {
-            return "Erro ao enviar o arquivo: " + e.getMessage();
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            contentType = "application/octet-stream";
         }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    //Listar arquivos (GET)
+    @GetMapping("/files-list")
+    public ResponseEntity<List<String>> listarArquivos() throws IOException {
+        List<String> fileNames = chatbotService.listarArquivos();
+        return ResponseEntity.ok(fileNames);
     }
 
     //Enviar e-mail

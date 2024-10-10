@@ -1,11 +1,13 @@
 package org.squad05.chatbot.service;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -17,10 +19,15 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
+import org.squad05.chatbot.configurations.FileStorageProperties;
 import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.ChatbotRepository;
@@ -36,9 +43,6 @@ public class ChatbotService {
     @Autowired
     private FuncionarioService funcionarioService;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
-
     @Value("${email.host}")
     private String host;
 
@@ -51,13 +55,15 @@ public class ChatbotService {
     @Value("${email.port}")
     private String port;
 
-    public void init() {
-        try {
-            Files.createDirectories(Paths.get(uploadDir));
-        } catch (IOException e) {
-            throw new RuntimeException("Não foi possível criar o diretório de arquivos.");
-        }
+    private final Path fileStorageLocation;
+
+    //Construtor de arquivos
+    @Autowired
+    public ChatbotService(FileStorageProperties fileStorageProperties) {
+        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
+                .toAbsolutePath().normalize();
     }
+
 
     //Criar um processo
     public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
@@ -117,22 +123,6 @@ public class ChatbotService {
         return chatbotRepository.findAll();
     }
 
-    //Upload de arquvios
-    public String enviarArquivo(MultipartFile file, Long processoId) throws Exception {
-
-        //Cria o diretório se não existir
-        Files.createDirectories(Paths.get(uploadDir));
-        //Salvando o arquivo no sistema
-        Path filePath = Paths.get(uploadDir, file.getOriginalFilename());
-        Files.write(filePath, file.getBytes());
-
-        ChatbotProcesso processo = buscarProcessoPorId(processoId);
-        processo.setCaminho_arquivo(filePath.toString());
-        chatbotRepository.save(processo);
-
-        return "Arquivo enviado com sucesso: " + filePath.toString();
-    }
-
     //Envio de e-mail
     public void enviarEmail(String to, String subject, String body) throws Exception {
 
@@ -166,5 +156,69 @@ public class ChatbotService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    //Upload de arquivos
+    public String enviarArquivo(MultipartFile file, Long ocorrenciaId) {
+        String nomeArquivo = StringUtils.cleanPath(file.getOriginalFilename());
+
+        //Verificando o tipo de arquivo:
+        String contentType = file.getContentType();
+        if (!isAllowedFileType(contentType)) {
+            throw new RuntimeException("Tipo de arquivo não permitido. Apenas JPEG, PNG e PDF são aceitos.");
+        }
+
+        try {
+            //Salvando o arquivo fisicamente
+            Path targetLocation = fileStorageLocation.resolve(nomeArquivo);
+            file.transferTo(targetLocation);
+
+            ChatbotProcesso processo = buscarProcessoPorId(ocorrenciaId);
+
+            processo.setCaminho_arquivo(nomeArquivo);//Associa o arquivo ao processo
+            chatbotRepository.save(processo);
+
+            return ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/processos/download/")
+                    .path(nomeArquivo)
+                    .toUriString();
+
+        } catch (IOException ex) {
+            throw new RuntimeException("Não foi possível armazenar o arquivo " +
+                    nomeArquivo + ". Por favor, tente novamente!", ex);
+        }
+    }
+
+    //Verifica se o tipo de arquivo é permitido
+    private boolean isAllowedFileType(String contentType) {
+        return contentType.equals("image/jpeg") ||
+                contentType.equals("image/png") ||
+                contentType.equals("application/pdf");
+    }
+
+    //Download de arquivos
+    public Resource baixarArquivo(String fileName) {
+        try {
+            Path filePath = fileStorageLocation.resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Arquivo não encontrado" + fileName);
+            }
+
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException("Arquivo não encontrado " + fileName, ex);
+        }
+    }
+
+    //Listar todos os arquivos presentes
+    public List<String> listarArquivos() throws IOException {
+        return Files.list(fileStorageLocation)
+                .map(Path::getFileName)
+                .map(Path::toString)
+                .collect(Collectors.toList());
+
     }
 }
