@@ -162,6 +162,12 @@ public class ChatbotService {
     public String enviarArquivo(MultipartFile file, Long processoId) {
         String nomeArquivo = StringUtils.cleanPath(file.getOriginalFilename());
 
+        //Verificando o tipo de arquivo:
+        String contentType = file.getContentType();
+        if (!isAllowedFileType(contentType)) {
+            throw new RuntimeException("Tipo de arquivo não permitido. Apenas JPEG, PNG e PDF são aceitos.");
+        }
+
         try {
             //Salvando o arquivo fisicamente
             Path targetLocation = fileStorageLocation.resolve(nomeArquivo);
@@ -181,6 +187,13 @@ public class ChatbotService {
             throw new RuntimeException("Não foi possível armazenar o arquivo " +
                     nomeArquivo + ". Por favor, tente novamente!", ex);
         }
+    }
+
+    //Verifica se o tipo de arquivo é permitido
+    private boolean isAllowedFileType(String contentType) {
+        return contentType.equals("image/jpeg") ||
+                contentType.equals("image/png") ||
+                contentType.equals("application/pdf");
     }
 
     //Download de arquivos
