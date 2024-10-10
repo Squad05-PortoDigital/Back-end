@@ -97,7 +97,7 @@ public class ChatbotService {
             if (!chatbotRepository.existsById(id)) throw new ResourceNotFoundException(id);
             ChatbotProcesso chatbotProcesso = buscarProcessoPorId(id);
             mapearProcesso(chatbotProcesso, dadosAtualziados);
-            
+
             return chatbotRepository.save(chatbotProcesso);
         } catch (ResourceNotFoundException e) {
             throw new ResourceNotFoundException(id);

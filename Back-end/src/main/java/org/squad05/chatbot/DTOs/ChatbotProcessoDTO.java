@@ -10,7 +10,7 @@ public class ChatbotProcessoDTO {
     private String descricao;
     private String urgencia;
     private Long id_destinatario;
-    private String caminho_arquivo;
+    private String nome_arquivo;
 
     //Getters e Setters
 
@@ -70,11 +70,11 @@ public class ChatbotProcessoDTO {
         this.id_destinatario = id_destinatario;
     }
 
-    public String getCaminho_arquivo() {
-        return caminho_arquivo;
+    public String getNome_arquivo() {
+        return nome_arquivo;
     }
 
-    public void setCaminho_arquivo(String caminho_arquivo) {
-        this.caminho_arquivo = caminho_arquivo;
+    public void setNome_arquivo(String caminho_arquivo) {
+        this.nome_arquivo = caminho_arquivo;
     }
 }
