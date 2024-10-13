@@ -3,6 +3,7 @@ const chatInput = document.querySelector('.chat-input textarea');
 const chatBox = document.querySelector('.chatbox');
 const chatbotToggler = document.querySelector('.chatbot-toggler');
 const chatbotCloseBtn = document.querySelector('.close-btn');
+const fileInput = document.getElementById('fileInput');
 
 const options = {
     1: "Justificativa de faltas",
@@ -58,31 +59,16 @@ function handleMsgChoiceUser(options) {
     });
 }
 
-function followFluxo(options) {
-    const values = Object.keys(options);
-    const firstValue = values[0];
-    const secondValue = values[1];
-    if(firstValue) {
-        chatBox.appendChild(createChatLi("Por favor, anexe seu atestado abaixo", "incoming"));
-    } else {
-        chatBox.appendChild(createChatLi("Falta justificada com sucesso!", "incoming"));
-    }
+function handleChangeInputFile() {
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files;
+        if(file.length > 0) {
+            chatBox.appendChild(createChatLi("Sua justificativa foi registrada com sucesso!", "incoming"));
+        } else {
+            return;
+        }
+    });
 }
-
-// function analyseChoice(options) {
-//     const values = Object.keys(options);
-//     // const firstKey = values[0];
-//     // const secondKey = values[1];
-
-//     // const responseOne = options[firstKey].toLowerCase().trim();
-//     // const responseTwo = options[secondKey].toLowerCase().trim();
-
-//     // if(responseOne) {
-//     //     console.log('Sim Ok...')
-//     // } else {
-//     //     console.log('Não ok...')
-//     // }
-// }
 
 handleMessageFirst(options);
 
@@ -109,7 +95,6 @@ const resetForm = () => {
 };
 
 let awaitingMedicalCertificateChoice = false; // Nova variável para acompanhar o estado
-const fileInput = document.getElementById('fileInput');
 
 const handleChat = () => {
     const userMessage = chatInput.value.trim();
@@ -199,9 +184,10 @@ const handleChat = () => {
             chatBox.appendChild(createChatLi("Por favor, anexe o atestado.", "incoming"));
             fileInput.style.display = 'block';
             chatBox.appendChild(fileInput);
+            handleChangeInputFile();
             // Lógica para anexar atestado aqui
         } else { // Não - Justificativa sem atestado
-            chatBox.appendChild(createChatLi("Sua justificativa foi registrado com sucesso!", "incoming"));
+            chatBox.appendChild(createChatLi("Sua justificativa foi registrada com sucesso!", "incoming"));
         }
         
         awaitingMedicalCertificateChoice = false; // Resetar o estado
