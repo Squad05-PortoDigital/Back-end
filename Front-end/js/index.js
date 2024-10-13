@@ -55,8 +55,18 @@ function handleMsgChoiceUser(options) {
     const values = Object.keys(options);
     values.forEach(key => {
         chatBox.appendChild(createChatLi(`${key}. ${options[key]}`, "incoming"));
-        console.log(options[key]);
     });
+}
+
+function followFluxo(options) {
+    const values = Object.keys(options);
+    const firstValue = values[0];
+    const secondValue = values[1];
+    if(firstValue) {
+        chatBox.appendChild(createChatLi("Por favor, anexe seu atestado abaixo", "incoming"));
+    } else {
+        chatBox.appendChild(createChatLi("Falta justificada com sucesso!", "incoming"));
+    }
 }
 
 // function analyseChoice(options) {
@@ -88,6 +98,7 @@ let userRegistration = ""; // Inicialização da variável userRegistration
 let absenceDate = ""; // Variável para armazenar a data da falta
 let absenceReason = ""; // Variável para armazenar o motivo da falta
 let hasMedicalCertificate = ""; // Variável para armazenar a resposta sobre o atestado
+let MedicalCertificate = false;
 
 const resetForm = () => {
     selectedOption = "";
@@ -97,16 +108,18 @@ const resetForm = () => {
     absenceReason = "";
 };
 
+let awaitingMedicalCertificateChoice = false; // Nova variável para acompanhar o estado
+
 const handleChat = () => {
     const userMessage = chatInput.value.trim();
-    // Verificação da seleção de opção
-    if (!isNaN(parseInt(userMessage, 10)) && options[userMessage]) {
+
+    // Verificação da seleção de opção principal
+    if (!isNaN(parseInt(userMessage, 10)) && options[userMessage] && !awaitingMedicalCertificateChoice) {
         chatBox.appendChild(createChatLi(userMessage, "outgoing"));
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
 
         selectedOption = userMessage;
-        selectedChoice = userMessage;
 
         switch (selectedOption) {
             case '1':
@@ -142,7 +155,6 @@ const handleChat = () => {
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
 
-        // Ajusta o próximo passo com base na opção selecionada
         if (selectedOption === '1') {
             chatBox.appendChild(createChatLi(`Agora, por favor, informe a data da falta (formato: YYYY-MM-DD).`, "incoming"));
         } else if (selectedOption === '2') {
@@ -152,7 +164,6 @@ const handleChat = () => {
 
     // Verificação para a data da falta
     else if (selectedOption === '1' && userRegistration !== "" && absenceDate === "" && userMessage.length > 0) {
-        // Validação básica da data (pode ser mais detalhada)
         const datePattern = /^\d{4}-\d{2}-\d{2}$/;
         if (datePattern.test(userMessage)) {
             absenceDate = userMessage; // Armazena a data da falta
@@ -169,31 +180,34 @@ const handleChat = () => {
     else if (selectedOption === '1' && absenceDate !== "" && absenceReason === "" && userMessage.length > 0) {
         absenceReason = userMessage; // Armazena o motivo da falta
         chatBox.appendChild(createChatLi(userMessage, "outgoing"));
-        // chatBox.appendChild(createChatLi("Falta justificada com sucesso! Obrigado por fornecer as informações.", "incoming"));
-        // chatBox.appendChild(createChatLi(`Registramos o seguinte: \nNome: ${userName}, \nMatrícula: ${userRegistration}, \nData da Falta: ${absenceDate}, \nMotivo: ${absenceReason}.`, "incoming"));
 
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
+
+        // Pergunta se o usuário possui atestado
         chatBox.appendChild(createChatLi("Você possui um atestado médico?", "incoming"));
-        // chatBox.appendChild(createChatLi("Selecione uma nova opção:", "incoming"));
-        // handleMessageFirst(options); // Exibe o menu de opções
         handleMsgChoiceUser(choiceUser);
+        awaitingMedicalCertificateChoice = true; // Aguarda a escolha sobre o atestado
     }
-    
-    // Verificação para horas extras
-    else if (selectedOption === '2' && userRegistration !== "" && userMessage.length > 0) {
-        const hoursPattern = /^\d+$/; // Verifica se a entrada é um número
-        if (hoursPattern.test(userMessage)) {
-            chatBox.appendChild(createChatLi(userMessage, "outgoing"));
-            chatBox.appendChild(createChatLi("Solicitação de horas extras registrada com sucesso!", "incoming"));
-        } else {
-            chatBox.appendChild(createChatLi("Por favor, informe a quantidade de horas corretamente.", "incoming"));
+
+    // Verificação para a escolha do atestado médico
+    else if (awaitingMedicalCertificateChoice && (userMessage === '1' || userMessage === '2')) {
+        chatBox.appendChild(createChatLi(userMessage === '1' ? "Sim" : "Não", "outgoing"));
+
+        if (userMessage === '1') { // Sim - Anexar atestado
+            chatBox.appendChild(createChatLi("Por favor, anexe seu atestado abaixo.", "incoming"));
+            // Lógica para anexar atestado aqui
+        } else { // Não - Justificativa sem atestado
+            chatBox.appendChild(createChatLi("Sua justificativa foi registrado com sucesso!", "incoming"));
         }
+        
+        awaitingMedicalCertificateChoice = false; // Resetar o estado
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
     }
-    // Continue com outras condições conforme o fluxo
 };
+
+
 
 const handleEnter = () => {
     document.addEventListener('keydown', event => {
