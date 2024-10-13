@@ -196,7 +196,7 @@ const handleChat = () => {
         chatBox.appendChild(createChatLi(userMessage === '1' ? "Sim" : "Não", "outgoing"));
 
         if (userMessage === '1') { // Sim - Anexar atestado
-            chatBox.appendChild(createChatLi("Por favor, anexe seu atestado abaixo.", "incoming"));
+            chatBox.appendChild(createChatLi("Por favor, anexe o atestado.", "incoming"));
             fileInput.style.display = 'block';
             chatBox.appendChild(fileInput);
             // Lógica para anexar atestado aqui
