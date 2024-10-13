@@ -109,6 +109,7 @@ const resetForm = () => {
 };
 
 let awaitingMedicalCertificateChoice = false; // Nova variável para acompanhar o estado
+const fileInput = document.getElementById('fileInput');
 
 const handleChat = () => {
     const userMessage = chatInput.value.trim();
@@ -196,6 +197,8 @@ const handleChat = () => {
 
         if (userMessage === '1') { // Sim - Anexar atestado
             chatBox.appendChild(createChatLi("Por favor, anexe seu atestado abaixo.", "incoming"));
+            fileInput.style.display = 'block';
+            chatBox.appendChild(fileInput);
             // Lógica para anexar atestado aqui
         } else { // Não - Justificativa sem atestado
             chatBox.appendChild(createChatLi("Sua justificativa foi registrado com sucesso!", "incoming"));
