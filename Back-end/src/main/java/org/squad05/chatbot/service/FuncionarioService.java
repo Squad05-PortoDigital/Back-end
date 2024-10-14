@@ -23,7 +23,13 @@ public class FuncionarioService {
     //Buscar funcionário por ID
     public Funcionario buscarFuncionarioPorId(Long id) {
         return funcionarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado: " + id));
+    }
+
+    //Buscar funcionário por CPF
+    public Funcionario buscarFuncionarioPorCpf(String cpf) {
+        return funcionarioRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ResourceNotFoundException("CPF não encontrado: " + cpf));
     }
 
     //Atualizar um funcionário
@@ -32,8 +38,8 @@ public class FuncionarioService {
     			if (!funcionarioRepository.existsById(id)) throw new ResourceNotFoundException(id);
     	        Funcionario funcionario = buscarFuncionarioPorId(id);
     	        funcionario.setNome(dadosAtualizados.getNome());
+                funcionario.setCpf(dadosAtualizados.getCpf());
     	        funcionario.setEmail(dadosAtualizados.getEmail());
-    	        funcionario.setSetor(dadosAtualizados.getSetor());
     	        funcionario.setCargo(dadosAtualizados.getCargo());
     	        return funcionarioRepository.save(funcionario);	
     	        

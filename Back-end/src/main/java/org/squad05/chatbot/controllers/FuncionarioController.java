@@ -21,10 +21,17 @@ public class FuncionarioController {
         return ResponseEntity.ok(novoFuncionario);
     }
 
-    //Get funcionario by id (GETBYID)
+    //Buscar funcionario por id (GET)
     @GetMapping("/{id}")
     public ResponseEntity<Funcionario> buscarFuncionarioPorId(@PathVariable Long id) {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(id);
+        return ResponseEntity.ok(funcionario);
+    }
+
+    //Buscar funcionário por CPF
+    @GetMapping("/buscarcpf/{cpf}")
+    public ResponseEntity<Funcionario> buscarFuncionarioPorCpf(@PathVariable String cpf) {
+        Funcionario funcionario = funcionarioService.buscarFuncionarioPorCpf(cpf);
         return ResponseEntity.ok(funcionario);
     }
 
