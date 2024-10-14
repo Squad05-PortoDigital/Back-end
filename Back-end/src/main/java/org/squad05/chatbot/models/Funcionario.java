@@ -14,7 +14,7 @@ public class Funcionario {
     private Long id_funcionario;
 
     @NotNull
-    @Size(min = 11, max = 11) //Garante o tamanho do cpf
+    @Size(min = 11, max = 11) //Garante o tamanho do cpf - mas não formata
     @Column(unique = true)
     private String cpf;
 
