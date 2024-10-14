@@ -1,6 +1,10 @@
 package org.squad05.chatbot.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Table(name = "funcionarios")
@@ -8,13 +12,17 @@ public class Funcionario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_funcionario;
+
+    @NotNull
+    @Size(min = 11, max = 11) //Garante o tamanho do cpf
+    @Column(unique = true)
+    private String cpf;
+
     private String nome;
     private String email;
-    private String setor;
     private String cargo;
 
     //Getters e setters
-
     public Long getId_funcionario() {
         return id_funcionario;
     }
@@ -39,12 +47,12 @@ public class Funcionario {
         this.email = email;
     }
 
-    public String getSetor() {
-        return setor;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setSetor(String setor) {
-        this.setor = setor;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getCargo() {
@@ -54,4 +62,6 @@ public class Funcionario {
     public void setCargo(String cargo) {
         this.cargo = cargo;
     }
+
+
 }

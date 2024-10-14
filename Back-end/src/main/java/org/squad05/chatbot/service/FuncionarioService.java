@@ -32,8 +32,8 @@ public class FuncionarioService {
     			if (!funcionarioRepository.existsById(id)) throw new ResourceNotFoundException(id);
     	        Funcionario funcionario = buscarFuncionarioPorId(id);
     	        funcionario.setNome(dadosAtualizados.getNome());
+                funcionario.setCpf(dadosAtualizados.getCpf());
     	        funcionario.setEmail(dadosAtualizados.getEmail());
-    	        funcionario.setSetor(dadosAtualizados.getSetor());
     	        funcionario.setCargo(dadosAtualizados.getCargo());
     	        return funcionarioRepository.save(funcionario);	
     	        
