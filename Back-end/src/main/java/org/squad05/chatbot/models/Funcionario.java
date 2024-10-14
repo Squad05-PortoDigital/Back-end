@@ -2,9 +2,7 @@ package org.squad05.chatbot.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Table(name = "funcionarios")
