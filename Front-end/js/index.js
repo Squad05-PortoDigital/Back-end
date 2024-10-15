@@ -142,7 +142,7 @@ const handleChat = () => {
         chatBox.scrollTo(0, chatBox.scrollHeight);
 
         if (selectedOption === '1') {
-            chatBox.appendChild(createChatLi(`Agora, por favor, informe a data da falta (formato: YYYY-MM-DD).`, "incoming"));
+            chatBox.appendChild(createChatLi(`Agora, por favor, informe a data da falta (formato: MM-DD-YYYY).`, "incoming"));
         } else if (selectedOption === '2') {
             chatBox.appendChild(createChatLi(`Agora, por favor, informe a quantidade de horas extras solicitadas.`, "incoming"));
         }
@@ -150,7 +150,8 @@ const handleChat = () => {
 
     // Verificação para a data da falta
     else if (selectedOption === '1' && userRegistration !== "" && absenceDate === "" && userMessage.length > 0) {
-        const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+        // const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+        const datePattern = /^\d{2}-\d{2}-\d{4}$/;
         if (datePattern.test(userMessage)) {
             absenceDate = userMessage; // Armazena a data da falta
             chatBox.appendChild(createChatLi(userMessage, "outgoing"));
