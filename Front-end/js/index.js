@@ -18,6 +18,14 @@ const choiceUser = {
     2: 'Não'
 };
 
+const optionsHours = {
+    1: "Solicitar 1 hora",
+    2: "Solicitar 2 horas",
+    3: "Solicitar 3 horas",
+    4: "Solicitar 4 horas",
+    5: "Outra opção"
+}
+
 const createChatLi = (message, className) => {
     const chatLi = document.createElement('li');
     chatLi.classList.add('chat', className);
@@ -59,6 +67,13 @@ function handleMsgChoiceUser(options) {
     });
 }
 
+function handleHours(options) {
+    const values = Object.keys(options);
+    values.forEach(key => {
+        chatBox.appendChild(createChatLi(`${key}. ${options[key]}`, "incoming"));
+    });
+}
+
 function handleChangeInputFile() {
     fileInput.addEventListener('change', (event) => {
         const file = event.target.files;
@@ -92,15 +107,18 @@ const resetForm = () => {
     userRegistration = "";
     absenceDate = "";
     absenceReason = "";
+    hourRequested = "";
 };
 
-let awaitingMedicalCertificateChoice = false; // Nova variável para acompanhar o estado
+let awaitingMedicalCertificateChoice = false;
+let awaitRequestedHour = false;
+let hourRequested = "";
 
 const handleChat = () => {
     const userMessage = chatInput.value.trim();
 
     // Verificação da seleção de opção principal
-    if (!isNaN(parseInt(userMessage, 10)) && options[userMessage] && !awaitingMedicalCertificateChoice) {
+    if (!isNaN(parseInt(userMessage, 10)) && options[userMessage] && !awaitingMedicalCertificateChoice && !awaitRequestedHour) {
         chatBox.appendChild(createChatLi(userMessage, "outgoing"));
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
@@ -113,12 +131,52 @@ const handleChat = () => {
                 break;
             case '2':
                 chatBox.appendChild(createChatLi("Para solicitar horas extras, informe seu nome completo.", "incoming"));
+                awaitRequestedHour = true;
                 break;
             case '3':
                 console.log("Ação específica para a chave 3.");
                 break;
             default:
                 console.log("Ação padrão para chaves não específicas.");
+        }
+    
+    }
+
+    else if (awaitRequestedHour) {
+        if (userName === "" && userMessage.length > 0) {
+            chatBox.appendChild(createChatLi(userMessage, "outgoing"));
+            userName = userMessage;
+            const firstName = userName.split(" ")[0];
+            chatBox.appendChild(createChatLi(`Obrigado, ${firstName}! Agora, por favor, informe sua matrícula.`, "incoming"));
+            chatInput.value = '';
+            chatBox.scrollTo(0, chatBox.scrollHeight);
+        }
+        
+        else if (userName !== "" && userRegistration === "" && userMessage.length > 0) {
+            userRegistration = userMessage;
+            const firstName = userName.split(" ")[0];
+            chatBox.appendChild(createChatLi(userMessage, "outgoing"));
+            chatBox.appendChild(createChatLi(`Obrigado, ${firstName}! Sua matrícula é ${userRegistration}. Quantas horas extras você deseja solicitar?`, "incoming"));
+            handleHours(optionsHours); // Exibe as opções de horas extras
+            chatInput.value = '';
+            chatBox.scrollTo(0, chatBox.scrollHeight);
+        }
+        
+        
+        else if (userRegistration !== "" && hourRequested === "" && userMessage === '5') {
+            hourRequested = optionsHours[userMessage];
+            chatInput.value = "";
+            chatBox.appendChild(createChatLi(`${hourRequested}`, "outgoing")); 
+            chatBox.appendChild(createChatLi("Por favor, insira a quantidade de horas extras que deseja solicitar.", "incoming"));
+        }
+        
+        else if (userRegistration !== "" && hourRequested === "" && optionsHours[userMessage]) {
+            hourRequested = optionsHours[userMessage];
+            chatBox.appendChild(createChatLi(`${hourRequested}`, "outgoing"));
+            chatInput.value = '';
+            chatBox.scrollTo(0, chatBox.scrollHeight);
+            awaitRequestedHour = false;
+            resetForm();
         }
     }
 
@@ -143,21 +201,33 @@ const handleChat = () => {
 
         if (selectedOption === '1') {
             chatBox.appendChild(createChatLi(`Agora, por favor, informe a data da falta (formato: MM-DD-YYYY).`, "incoming"));
-        } else if (selectedOption === '2') {
-            chatBox.appendChild(createChatLi(`Agora, por favor, informe a quantidade de horas extras solicitadas.`, "incoming"));
+        } else if (selectedOption === '2' && userRegistration !== "") {
+            if (hourRequested === "") {
+                // Exibe as opções de horas
+                chatBox.appendChild(createChatLi("Quantas horas extras você deseja solicitar?", "incoming"));
+                handleHours(optionsHours);
+            } else if (optionsHours[userMessage]) {
+                // Armazena a quantidade de horas extras solicitada
+                hourRequested = optionsHours[userMessage];
+                chatBox.appendChild(createChatLi(`Você solicitou ${hourRequested}.`, "incoming"));
+                chatInput.value = '';
+                chatBox.scrollTo(0, chatBox.scrollHeight);
+            } else if (userMessage === '5') {
+                // Caso o usuário escolha "Outra opção", pergunte o número específico de horas
+                chatBox.appendChild(createChatLi("Por favor, insira a quantidade de horas extras que deseja solicitar.", "incoming"));
+            }
         }
     }
 
     // Verificação para a data da falta
     else if (selectedOption === '1' && userRegistration !== "" && absenceDate === "" && userMessage.length > 0) {
-        // const datePattern = /^\d{4}-\d{2}-\d{2}$/;
         const datePattern = /^\d{2}-\d{2}-\d{4}$/;
         if (datePattern.test(userMessage)) {
             absenceDate = userMessage; // Armazena a data da falta
             chatBox.appendChild(createChatLi(userMessage, "outgoing"));
             chatBox.appendChild(createChatLi(`Sua falta no dia ${absenceDate} foi registrada com sucesso. Por favor, agora nos informe o motivo da sua ausência em ${absenceDate}.`, "incoming"));
         } else {
-            chatBox.appendChild(createChatLi("Por favor, informe a data corretamente no formato YYYY-MM-DD.", "incoming"));
+            chatBox.appendChild(createChatLi("Por favor, informe a data corretamente no formato DD-MM-YYYY.", "incoming"));
         }
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
@@ -180,20 +250,19 @@ const handleChat = () => {
     // Verificação para a escolha do atestado médico
     else if (awaitingMedicalCertificateChoice && (userMessage === '1' || userMessage === '2')) {
         chatBox.appendChild(createChatLi(userMessage === '1' ? "Sim" : "Não", "outgoing"));
-
         if (userMessage === '1') { // Sim - Anexar atestado
             chatBox.appendChild(createChatLi("Por favor, anexe o atestado.", "incoming"));
             fileInput.style.display = 'block';
             chatBox.appendChild(fileInput);
             handleChangeInputFile();
-            // Lógica para anexar atestado aqui
-        } else { // Não - Justificativa sem atestado
+        } else {
             chatBox.appendChild(createChatLi("Sua justificativa foi registrada com sucesso!", "incoming"));
         }
-        
+
         awaitingMedicalCertificateChoice = false; // Resetar o estado
         chatInput.value = '';
         chatBox.scrollTo(0, chatBox.scrollHeight);
+        // chatBox.appendChild(createChatLi("Precisa de mais alguma coisa?", "incoming"));
     }
 };
 
