@@ -36,23 +36,6 @@ const createChatLi = (message, className) => {
     return chatLi;
 };
 
-// const createChatLi = (message, className) => {
-//     const chatLi = document.createElement('li');
-//     chatLi.classList.add('chat', className);
-
-//     let chatContent;
-//     if (className === "outgoing") {
-//         chatContent = `<p></p>`;
-//     } else if (Object.values(options).some(option => message.includes(option))) {
-//         chatContent = `<p></p>`;
-//     } else {
-//         chatContent = `<span class="material-symbols-outlined">smart_toy</span><p></p>`;
-//     }
-
-//     chatLi.innerHTML = chatContent;
-//     chatLi.querySelector("p").textContent = message;
-//     return chatLi;
-// };
 
 function handleMessageFirst(options) {
     const values = Object.keys(options);
