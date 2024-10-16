@@ -4,6 +4,7 @@ const chatBox = document.querySelector('.chatbox');
 const chatbotToggler = document.querySelector('.chatbot-toggler');
 const chatbotCloseBtn = document.querySelector('.close-btn');
 const fileInput = document.getElementById('fileInput');
+const formHour = document.getElementById('formHour');
 
 const options = {
     1: "Justificativa de faltas",
@@ -168,6 +169,8 @@ const handleChat = () => {
             chatInput.value = "";
             chatBox.appendChild(createChatLi(`${hourRequested}`, "outgoing")); 
             chatBox.appendChild(createChatLi("Por favor, insira a quantidade de horas extras que deseja solicitar.", "incoming"));
+            formHour.style.display = 'block';
+            chatBox.appendChild(formHour);
         }
         
         else if (userRegistration !== "" && hourRequested === "" && optionsHours[userMessage]) {
@@ -215,6 +218,8 @@ const handleChat = () => {
             } else if (userMessage === '5') {
                 // Caso o usuário escolha "Outra opção", pergunte o número específico de horas
                 chatBox.appendChild(createChatLi("Por favor, insira a quantidade de horas extras que deseja solicitar.", "incoming"));
+                formHour.style.display = 'block';
+                chatBox.appendChild(formHour);
             }
         }
     }
