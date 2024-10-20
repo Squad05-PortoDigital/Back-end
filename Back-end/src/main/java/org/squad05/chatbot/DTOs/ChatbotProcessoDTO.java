@@ -1,10 +1,13 @@
 package org.squad05.chatbot.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class ChatbotProcessoDTO {
     private Long id_funcionario;
     private String tipo_processo;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate data_solicitacao;
     private String status;
     private String descricao;
@@ -13,7 +16,6 @@ public class ChatbotProcessoDTO {
     private String nome_arquivo;
 
     //Getters e Setters
-
     public Long getId_funcionario() {
         return id_funcionario;
     }
