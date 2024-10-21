@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -18,11 +17,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -81,10 +77,18 @@ public class ChatbotService {
     //Criar um processo
     public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getId_funcionario());
+        Funcionario destinatario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getId_destinatario());
 
         ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
         chatbotProcesso.setId_funcionario(funcionario);
         mapearProcesso(chatbotProcesso, chatbotProcessoDTO);
+
+        try {
+            this.enviarEmail(destinatario.getEmail(), chatbotProcessoDTO.getTipo_processo(), chatbotProcessoDTO.getDescricao());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         return chatbotRepository.save(chatbotProcesso);
     }
@@ -98,7 +102,9 @@ public class ChatbotService {
     //Atualizar um processo
     public ChatbotProcesso atualizarProcesso(Long id, ChatbotProcessoDTO dadosAtualziados) {
         try {
-            if (!chatbotRepository.existsById(id)) throw new ResourceNotFoundException(id);
+            if (!chatbotRepository.existsById(id)) {
+                throw new ResourceNotFoundException(id);
+            }
             ChatbotProcesso chatbotProcesso = buscarProcessoPorId(id);
             mapearProcesso(chatbotProcesso, dadosAtualziados);
 
@@ -110,15 +116,17 @@ public class ChatbotService {
 
     //Deletar um processo
     public void deletarProcesso(Long id) {
-    	try {
-    		if (!chatbotRepository.existsById(id)) throw new ResourceNotFoundException(id);
-    		ChatbotProcesso processo = buscarProcessoPorId(id);
-    		chatbotRepository.delete(processo);   		
-    	} catch (ResourceNotFoundException e) {
-    		throw new ResourceNotFoundException(id);
-    	} catch (DataIntegrityViolationException e) {
-	    	throw new DataBaseException(e.getMessage());
-	    } 
+        try {
+            if (!chatbotRepository.existsById(id)) {
+                throw new ResourceNotFoundException(id);
+            }
+            ChatbotProcesso processo = buscarProcessoPorId(id);
+            chatbotRepository.delete(processo);
+        } catch (ResourceNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataBaseException(e.getMessage());
+        }
     }
 
     //Listar todos os processos
@@ -187,16 +195,16 @@ public class ChatbotService {
                     .toUriString();
 
         } catch (IOException ex) {
-            throw new RuntimeException("Não foi possível armazenar o arquivo " +
-                    nomeArquivo + ". Por favor, tente novamente!", ex);
+            throw new RuntimeException("Não foi possível armazenar o arquivo "
+                    + nomeArquivo + ". Por favor, tente novamente!", ex);
         }
     }
 
     //Verifica se o tipo de arquivo é permitido
     private boolean isAllowedFileType(String contentType) {
-        return contentType.equals("image/jpeg") ||
-                contentType.equals("image/png") ||
-                contentType.equals("application/pdf");
+        return contentType.equals("image/jpeg")
+                || contentType.equals("image/png")
+                || contentType.equals("application/pdf");
     }
 
     //Download de arquivos
