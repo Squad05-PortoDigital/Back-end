@@ -3,7 +3,6 @@ package org.squad05.chatbot.controllers;
 import java.io.IOException;
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,9 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.squad05.chatbot.DTOs.ChatbotProcessoDTO;
-import org.squad05.chatbot.DTOs.EmailDTO;
 import org.squad05.chatbot.models.ChatbotProcesso;
 import org.squad05.chatbot.service.ChatbotService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/processos")
@@ -68,8 +68,8 @@ public class ChatbotController {
 
     //Upload de arquivo (POST)
     @PostMapping("/upload")
-    public ResponseEntity<String> enviarArquivo(@RequestParam("file")MultipartFile file,
-                                                @RequestParam("processoId") Long ocorrenciaId) {
+    public ResponseEntity<String> enviarArquivo(@RequestParam("file") MultipartFile file,
+            @RequestParam("processoId") Long ocorrenciaId) {
         String downloadUri = chatbotService.enviarArquivo(file, ocorrenciaId);
         return ResponseEntity.ok("Upload realizado! Download link: " + downloadUri);
     }
@@ -99,16 +99,4 @@ public class ChatbotController {
         List<String> fileNames = chatbotService.listarArquivos();
         return ResponseEntity.ok(fileNames);
     }
-
-    //Enviar e-mail
-    @PostMapping("/send-email")
-    public ResponseEntity<String> enviarEmail(@RequestBody EmailDTO email) {
-        try {
-            chatbotService.enviarEmail(email.getDestinatario(), email.getAssunto(), email.getMensagem());
-            return ResponseEntity.ok("Email enviado com sucesso!");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erro ao enviar o email: " + e.getMessage());
-        }
-    }
-
 }
