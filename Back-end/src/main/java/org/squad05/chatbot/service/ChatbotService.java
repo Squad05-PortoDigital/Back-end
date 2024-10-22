@@ -6,19 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,17 +34,8 @@ public class ChatbotService {
     @Autowired
     private FuncionarioService funcionarioService;
 
-    @Value("${email.host}")
-    private String host;
-
-    @Value("${email.user}")
-    private String user;
-
-    @Value("${email.password}")
-    private String password;
-
-    @Value("${email.port}")
-    private String port;
+    @Autowired
+    private EmailService emailService;
 
     private final Path fileStorageLocation;
 
@@ -84,7 +66,7 @@ public class ChatbotService {
         mapearProcesso(chatbotProcesso, chatbotProcessoDTO);
 
         try {
-            this.enviarEmail(destinatario.getEmail(), chatbotProcessoDTO.getTipo_processo(), chatbotProcessoDTO.getDescricao());
+            emailService.enviarEmail(destinatario.getEmail(), destinatario.getNome(), funcionario.getNome(), chatbotProcessoDTO.getTipo_processo(), chatbotProcessoDTO.getDescricao());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -132,41 +114,6 @@ public class ChatbotService {
     //Listar todos os processos
     public List<ChatbotProcesso> listarTodosProcessos() {
         return chatbotRepository.findAll();
-    }
-
-    //Envio de e-mail
-    public void enviarEmail(String to, String subject, String body) throws Exception {
-
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", port);
-        properties.put("mail.smtp.starttls.enable", "true");
-
-        // Criação da sessão de e-mail
-        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        });
-
-        try {
-            // Criação da mensagem de e-mail
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(user));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject);
-            message.setText(body);
-
-            // Envio da mensagem
-            Transport.send(message);
-
-            System.out.println("E-mail enviado com sucesso!");
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
     }
 
     //Upload de arquivos

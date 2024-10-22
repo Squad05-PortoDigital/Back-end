@@ -69,7 +69,7 @@ public class ChatbotController {
     //Upload de arquivo (POST)
     @PostMapping("/upload")
     public ResponseEntity<String> enviarArquivo(@RequestParam("file") MultipartFile file,
-            @RequestParam("processoId") Long ocorrenciaId) {
+            @RequestParam("ocorrenciaId") Long ocorrenciaId) {
         String downloadUri = chatbotService.enviarArquivo(file, ocorrenciaId);
         return ResponseEntity.ok("Upload realizado! Download link: " + downloadUri);
     }
