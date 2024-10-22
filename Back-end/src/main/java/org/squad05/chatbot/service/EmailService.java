@@ -54,7 +54,7 @@ public class EmailService {
                             "%s\n\n" +
                             "Por favor, verifique os detalhes no sistema e tome as ações necessárias.\n\n" +
                             "Atenciosamente,\n" +
-                            "Equipe de Suporte",
+                            "Equipe de Suporte (MENSAGEM AUTOMÁTICA)",
                     nomeFuncionario, tipoProcesso, nomeDestinatario, descricao
             );
 
