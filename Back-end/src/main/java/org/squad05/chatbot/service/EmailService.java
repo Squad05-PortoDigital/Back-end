@@ -24,8 +24,7 @@ public class EmailService {
     private String port;
 
     //Envio de e-mail
-    public void enviarEmail(String to, String nomeFuncionario, String nomeDestinatario, String tipoProcesso, String descricao) throws Exception {
-
+    public void enviarEmail(String to, String subject, String body) throws Exception {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.auth", "true");
@@ -45,28 +44,46 @@ public class EmailService {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Nova ocorrência registrada: " + tipoProcesso);
-
-            String body = String.format(
-                    "Prezado(a) %s,\n\n" +
-                            "Uma nova ocorrência do tipo '%s' foi registrada no sistema por %s.\n\n" +
-                            "Descrição da ocorrência:\n" +
-                            "%s\n\n" +
-                            "Por favor, verifique os detalhes no sistema e tome as ações necessárias.\n\n" +
-                            "Atenciosamente,\n" +
-                            "Equipe de Suporte (MENSAGEM AUTOMÁTICA)",
-                    nomeFuncionario, tipoProcesso, nomeDestinatario, descricao
-            );
-
+            message.setSubject(subject);
             message.setText(body);
-
             // Envio da mensagem
             Transport.send(message);
-
             System.out.println("E-mail enviado com sucesso!");
 
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    // Envio de e-mail para o responsável
+    public void enviarEmailResponsavel(String to, String nomeFuncionario, String nomeDestinatario, String tipoProcesso, long idOcorrencia) throws Exception {
+        String subject = "Nova ocorrência registrada: " + tipoProcesso;
+        String body = String.format(
+                "Prezado(a) %s,\n\n" +
+                        "Uma nova ocorrência do tipo '%s' foi registrada no sistema por %s.\n\n" +
+                        "Código da ocorrência: %s\n\n" +
+                        "Por favor, verifique os detalhes no sistema e tome as ações necessárias.\n\n" +
+                        "Atenciosamente,\n" +
+                        "Equipe de Suporte\n" +
+                        "(Esta mensagem foi gerada automaticamente)",
+                nomeFuncionario, tipoProcesso, nomeDestinatario, idOcorrencia
+        );
+        enviarEmail(to, subject, body);
+    }
+
+    // Envio de e-mail para o solicitante
+    public void enviarEmailSolicitante(String to, String nomeSolicitante, String tipoProcesso, long idOcorrencia) throws Exception {
+        String subject = "Confirmação de ocorrência registrada: " + tipoProcesso;
+        String body = String.format(
+                "Prezado(a) %s,\n\n" +
+                        "Sua ocorrência do tipo '%s' foi registrada com sucesso.\n\n" +
+                        "Código da ocorrência: %s\n\n" +
+                        "A equipe responsável irá analisar e responder em breve.\n\n" +
+                        "Atenciosamente,\n" +
+                        "Equipe de Suporte\n" +
+                        "(Esta mensagem foi gerada automaticamente)",
+                nomeSolicitante, tipoProcesso, idOcorrencia
+        );
+        enviarEmail(to, subject, body);
     }
 }

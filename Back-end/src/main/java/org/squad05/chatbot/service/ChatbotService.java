@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,15 +67,18 @@ public class ChatbotService {
         ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
         chatbotProcesso.setId_funcionario(funcionario);
         mapearProcesso(chatbotProcesso, chatbotProcessoDTO);
+        chatbotRepository.save(chatbotProcesso);
 
         try {
-            emailService.enviarEmail(destinatario.getEmail(), destinatario.getNome(), funcionario.getNome(), chatbotProcessoDTO.getTipo_processo(), chatbotProcessoDTO.getDescricao());
+            emailService.enviarEmailResponsavel(destinatario.getEmail(), destinatario.getNome(), funcionario.getNome(),
+                    chatbotProcessoDTO.getTipo_processo(), chatbotProcesso.getId_ocorrencia());
+            emailService.enviarEmailSolicitante(funcionario.getEmail(),funcionario.getNome(), chatbotProcessoDTO.getTipo_processo(),
+                    chatbotProcesso.getId_ocorrencia());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        return chatbotRepository.save(chatbotProcesso);
+        return chatbotProcesso;
     }
 
     //Buscar processo por ID
