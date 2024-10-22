@@ -84,7 +84,7 @@ public class ChatbotService {
         mapearProcesso(chatbotProcesso, chatbotProcessoDTO);
 
         try {
-            this.enviarEmail(destinatario.getEmail(), chatbotProcessoDTO.getTipo_processo(), chatbotProcessoDTO.getDescricao());
+            this.enviarEmail(destinatario.getEmail(), destinatario.getNome(), funcionario.getNome(), chatbotProcessoDTO.getTipo_processo(), chatbotProcessoDTO.getDescricao());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -135,7 +135,7 @@ public class ChatbotService {
     }
 
     //Envio de e-mail
-    public void enviarEmail(String to, String subject, String body) throws Exception {
+    public void enviarEmail(String to, String nomeFuncionario, String nomeDestinatario, String tipoProcesso, String descricao) throws Exception {
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
@@ -156,7 +156,19 @@ public class ChatbotService {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject);
+            message.setSubject("Nova ocorrência registrada: " + tipoProcesso);
+
+            String body = String.format(
+                    "Prezado(a) %s,\n\n" +
+                            "Uma nova ocorrência do tipo '%s' foi registrada no sistema por %s.\n\n" +
+                            "Descrição da ocorrência:\n" +
+                            "%s\n\n" +
+                            "Por favor, verifique os detalhes no sistema e tome as ações necessárias.\n\n" +
+                            "Atenciosamente,\n" +
+                            "Equipe de Suporte",
+                    nomeFuncionario, tipoProcesso, nomeDestinatario, descricao
+            );
+
             message.setText(body);
 
             // Envio da mensagem
