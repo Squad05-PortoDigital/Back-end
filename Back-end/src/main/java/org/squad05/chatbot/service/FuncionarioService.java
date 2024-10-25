@@ -27,7 +27,7 @@ public class FuncionarioService {
     //Buscar funcionário por ID
     public Funcionario buscarFuncionarioPorId(Long id) {
         return funcionarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Funcionário não encontrado: id" + id));
     }
 
     //Buscar funcionário por CPF
