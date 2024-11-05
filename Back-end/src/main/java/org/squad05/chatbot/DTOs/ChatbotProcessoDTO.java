@@ -9,7 +9,12 @@ public class ChatbotProcessoDTO {
     private String tipo_processo;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate data_solicitacao;
-    private String status;
+    private String hora_extra;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate inicio_ferias;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate fim_ferias;
+    private String status = "Pendente";
     private String descricao;
     private String urgencia;
     private Long id_destinatario;
@@ -38,6 +43,30 @@ public class ChatbotProcessoDTO {
 
     public void setData_solicitacao(LocalDate data_solicitacao) {
         this.data_solicitacao = data_solicitacao;
+    }
+
+    public String getHora_extra() {
+        return hora_extra;
+    }
+
+    public void setHora_extra(String hora_extra) {
+        this.hora_extra = hora_extra;
+    }
+
+    public LocalDate getInicio_ferias() {
+        return inicio_ferias;
+    }
+
+    public void setInicio_ferias(LocalDate inicio_ferias) {
+        this.inicio_ferias = inicio_ferias;
+    }
+
+    public LocalDate getFim_ferias() {
+        return fim_ferias;
+    }
+
+    public void setFim_ferias(LocalDate fim_ferias) {
+        this.fim_ferias = fim_ferias;
     }
 
     public String getStatus() {

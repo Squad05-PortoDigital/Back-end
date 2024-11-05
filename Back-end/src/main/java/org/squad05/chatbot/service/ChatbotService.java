@@ -53,6 +53,9 @@ public class ChatbotService {
     private void mapearProcesso(ChatbotProcesso processo, ChatbotProcessoDTO dto) {
         processo.setTipo_processo(dto.getTipo_processo());
         processo.setData_solicitacao(dto.getData_solicitacao());
+        processo.setHora_extra(dto.getHora_extra());
+        processo.setInicio_ferias(dto.getInicio_ferias());
+        processo.setFim_ferias(dto.getFim_ferias());
         processo.setStatus(dto.getStatus());
         processo.setDescricao(dto.getDescricao());
         processo.setUrgencia(dto.getUrgencia());
