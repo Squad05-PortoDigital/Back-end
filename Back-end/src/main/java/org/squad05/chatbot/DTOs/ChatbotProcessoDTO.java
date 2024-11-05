@@ -2,7 +2,6 @@ package org.squad05.chatbot.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 public class ChatbotProcessoDTO {
@@ -10,7 +9,7 @@ public class ChatbotProcessoDTO {
     private String tipo_processo;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate data_solicitacao;
-    private int hora_extra; //Em minutos
+    private String hora_extra;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate inicio_ferias;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -46,11 +45,11 @@ public class ChatbotProcessoDTO {
         this.data_solicitacao = data_solicitacao;
     }
 
-    public int getHora_extra() {
+    public String getHora_extra() {
         return hora_extra;
     }
 
-    public void setHora_extra(int hora_extra) {
+    public void setHora_extra(String hora_extra) {
         this.hora_extra = hora_extra;
     }
 
