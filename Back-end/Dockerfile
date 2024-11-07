@@ -1,5 +1,5 @@
 # Etapa 1: Construir o JAR
-FROM maven:3.8.7-eclipse-temurin-21 AS builder
+FROM maven:3.9.7-eclipse-temurin-21 AS builder
 WORKDIR /app
 
 # Copia o pom.xml e outros arquivos necessários para resolver as dependências
