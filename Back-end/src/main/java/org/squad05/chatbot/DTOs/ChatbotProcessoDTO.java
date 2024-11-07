@@ -9,6 +9,8 @@ public class ChatbotProcessoDTO {
     private String tipo_processo;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate data_solicitacao;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate data_ocorrido;
     private String hora_extra;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate inicio_ferias;
@@ -43,6 +45,14 @@ public class ChatbotProcessoDTO {
 
     public void setData_solicitacao(LocalDate data_solicitacao) {
         this.data_solicitacao = data_solicitacao;
+    }
+
+    public LocalDate getData_ocorrido() {
+        return data_ocorrido;
+    }
+
+    public void setData_ocorrido(LocalDate data_ocorrido) {
+        this.data_ocorrido = data_ocorrido;
     }
 
     public String getHora_extra() {
