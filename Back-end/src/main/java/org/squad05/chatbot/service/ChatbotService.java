@@ -65,7 +65,6 @@ public class ChatbotService {
     //Criar um processo
     public ChatbotProcesso criarProcesso(ChatbotProcessoDTO chatbotProcessoDTO) {
         Funcionario funcionario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getId_funcionario());
-        Funcionario destinatario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getId_destinatario());
 
         ChatbotProcesso chatbotProcesso = new ChatbotProcesso();
         chatbotProcesso.setId_funcionario(funcionario);
@@ -73,6 +72,7 @@ public class ChatbotService {
         chatbotRepository.save(chatbotProcesso);
 
         try {
+            Funcionario destinatario = funcionarioService.buscarFuncionarioPorId(chatbotProcessoDTO.getId_destinatario());
             emailService.enviarEmailResponsavel(destinatario.getEmail(), destinatario.getNome(), funcionario.getNome(),
                     chatbotProcessoDTO.getTipo_processo(), chatbotProcesso.getId_ocorrencia());
             emailService.enviarEmailSolicitante(funcionario.getEmail(),funcionario.getNome(), chatbotProcessoDTO.getTipo_processo(),
