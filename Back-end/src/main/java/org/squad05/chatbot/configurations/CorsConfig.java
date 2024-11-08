@@ -9,10 +9,10 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://squad05-portodigital.github.io") //Enderço front-end
+                .allowedOrigins("https://squad05-portodigital.github.io", //Endereço front-end
+                        "https://back-end-chatbot-deploy.up.railway.app") //Enderço back-end
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedHeaders("*");
 
     }
 }
