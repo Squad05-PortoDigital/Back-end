@@ -16,11 +16,14 @@ public class ChatbotProcesso {
     private Funcionario id_funcionario;
 
     private String tipo_processo; //Solicitação de férias, justificativa, etc
-    private LocalDate data_solicitacao;
-    private LocalDate data_ocorrido;
-    private String hora_extra; //Em minutos
+    private LocalDate data_solicitacao; //Ex: dia em que o usuário solicitou a falta
+    private LocalDate data_ocorrencia; //Ex: dia em que o usuário faltou
+    //Opcionais
+    private String hora_extra;
     private LocalDate inicio_ferias;
     private LocalDate fim_ferias;
+    private String beneficio;
+
     private String status;
     private String descricao;
     private String urgencia;
@@ -61,12 +64,12 @@ public class ChatbotProcesso {
         this.data_solicitacao = data_solicitacao;
     }
 
-    public LocalDate getData_ocorrido() {
-        return data_ocorrido;
+    public LocalDate getData_ocorrencia() {
+        return data_ocorrencia;
     }
 
-    public void setData_ocorrido(LocalDate data_ocorrido) {
-        this.data_ocorrido = data_ocorrido;
+    public void setData_ocorrencia(LocalDate data_ocorrencia) {
+        this.data_ocorrencia = data_ocorrencia;
     }
 
     public String getHora_extra() {
@@ -91,6 +94,14 @@ public class ChatbotProcesso {
 
     public void setFim_ferias(LocalDate fim_ferias) {
         this.fim_ferias = fim_ferias;
+    }
+
+    public String getBeneficio() {
+        return beneficio;
+    }
+
+    public void setBeneficio(String beneficio) {
+        this.beneficio = beneficio;
     }
 
     public String getStatus() {
