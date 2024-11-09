@@ -8,14 +8,10 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,9 +49,11 @@ public class ChatbotService {
     private void mapearProcesso(ChatbotProcesso processo, ChatbotProcessoDTO dto) {
         processo.setTipo_processo(dto.getTipo_processo());
         processo.setData_solicitacao(dto.getData_solicitacao());
+        processo.setData_ocorrencia(dto.getData_ocorrencia());
         processo.setHora_extra(dto.getHora_extra());
         processo.setInicio_ferias(dto.getInicio_ferias());
         processo.setFim_ferias(dto.getFim_ferias());
+        processo.setBeneficio(dto.getBeneficio());
         processo.setStatus(dto.getStatus());
         processo.setDescricao(dto.getDescricao());
         processo.setUrgencia(dto.getUrgencia());
