@@ -12,7 +12,7 @@ public class ChatbotProcessoDTO {
     private LocalDate inicio_ferias;
     private LocalDate fim_ferias;
     private String beneficio;
-    private String nome_documento;
+    private String nome_documento; //Ex:rg, cpf
 
     private String status = "Pendente";
     private String descricao;
