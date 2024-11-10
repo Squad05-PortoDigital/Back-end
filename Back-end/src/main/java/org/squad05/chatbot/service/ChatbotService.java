@@ -57,6 +57,7 @@ public class ChatbotService {
         processo.setStatus(dto.getStatus());
         processo.setDescricao(dto.getDescricao());
         processo.setUrgencia(dto.getUrgencia());
+        processo.setNome_documento(dto.getNome_documento());
         processo.setId_destinatario(dto.getId_destinatario());
     }
 
