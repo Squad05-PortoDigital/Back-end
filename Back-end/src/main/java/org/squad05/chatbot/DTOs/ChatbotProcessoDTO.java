@@ -1,23 +1,18 @@
 package org.squad05.chatbot.DTOs;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDate;
 
 public class ChatbotProcessoDTO {
     private Long id_funcionario;
     private String tipo_processo;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate data_solicitacao;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate data_ocorrencia;
     //Opcionais
     private String hora_extra;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate inicio_ferias;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate fim_ferias;
     private String beneficio;
+    private String nome_documento;
 
     private String status = "Pendente";
     private String descricao;
@@ -88,6 +83,14 @@ public class ChatbotProcessoDTO {
 
     public void setBeneficio(String beneficio) {
         this.beneficio = beneficio;
+    }
+
+    public String getNome_documento() {
+        return nome_documento;
+    }
+
+    public void setNome_documento(String nome_documento) {
+        this.nome_documento = nome_documento;
     }
 
     public String getStatus() {
