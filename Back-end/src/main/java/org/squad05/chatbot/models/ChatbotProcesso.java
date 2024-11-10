@@ -23,6 +23,7 @@ public class ChatbotProcesso {
     private LocalDate inicio_ferias;
     private LocalDate fim_ferias;
     private String beneficio;
+    private String nome_documento;
 
     private String status;
     private String descricao;
@@ -98,6 +99,14 @@ public class ChatbotProcesso {
 
     public String getBeneficio() {
         return beneficio;
+    }
+
+    public String getNome_documento() {
+        return nome_documento;
+    }
+
+    public void setNome_documento(String nome_documento) {
+        this.nome_documento = nome_documento;
     }
 
     public void setBeneficio(String beneficio) {
