@@ -13,7 +13,7 @@ public class Funcionario {
 
     @NotNull
     @Size(min = 11, max = 11) //Garante o tamanho do cpf - mas não formata
-    @Column(unique = true)
+    @Column
     private String cpf;
 
     private String nome;
