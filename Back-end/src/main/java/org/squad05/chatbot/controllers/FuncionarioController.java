@@ -30,9 +30,9 @@ public class FuncionarioController {
 
     //Buscar funcionário por CPF
     @GetMapping("/buscarcpf/{cpf}")
-    public ResponseEntity<Funcionario> buscarFuncionarioPorCpf(@PathVariable String cpf) {
-        Funcionario funcionario = funcionarioService.buscarFuncionarioPorCpf(cpf);
-        return ResponseEntity.ok(funcionario);
+    public ResponseEntity<List<Funcionario>> buscarFuncionarioPorCpf(@PathVariable String cpf) {
+        List<Funcionario> funcionarios = funcionarioService.buscarFuncionarioPorCpf(cpf);
+        return ResponseEntity.ok(funcionarios);
     }
 
     //Atualizar funcionário (UPDATE)

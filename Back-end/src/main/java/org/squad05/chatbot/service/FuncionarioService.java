@@ -27,9 +27,12 @@ public class FuncionarioService {
     }
 
     //Buscar funcionário por CPF
-    public Funcionario buscarFuncionarioPorCpf(String cpf) {
-        return funcionarioRepository.findByCpf(cpf)
-                .orElseThrow(() -> new ResourceNotFoundException("CPF não encontrado: " + cpf));
+    public List<Funcionario> buscarFuncionarioPorCpf(String cpf) {
+        List<Funcionario> funcionarios = funcionarioRepository.findByCpf(cpf);
+        if (funcionarios.isEmpty()) {
+            throw new ResourceNotFoundException("CPF não encontrado: " + cpf);
+        }
+        return funcionarios;
     }
 
     //Atualizar um funcionário
