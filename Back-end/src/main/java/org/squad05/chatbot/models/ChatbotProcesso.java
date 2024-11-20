@@ -16,20 +16,19 @@ public class ChatbotProcesso {
     private Funcionario id_funcionario;
 
     private String tipo_processo; //Solicitação de férias, justificativa, etc
-    private LocalDate data_solicitacao; //Ex:dia em que o usuário solicitou a falta
+    private LocalDate data_solicitacao; //Ex: dia em que o usuário solicitou a falta
     private LocalDate data_ocorrencia; //Ex: dia em que o usuário faltou
+    private String status; //Pendente por padrão
+    private String descricao;
+    private String urgencia;
+    private Long id_destinatario;
     //Opcionais
     private String hora_extra;
     private LocalDate inicio_ferias;
     private LocalDate fim_ferias;
     private String beneficio;
     private String nome_documento;
-
-    private String status;
-    private String descricao;
-    private String urgencia;
-    private Long id_destinatario;
-    private String caminho_arquivo;
+    private String nome_arquivo;
 
 
     //Getters e setters
@@ -145,11 +144,11 @@ public class ChatbotProcesso {
         this.id_destinatario = id_destinatario;
     }
 
-    public String getCaminho_arquivo() {
-        return caminho_arquivo;
+    public String getNome_arquivo() {
+        return nome_arquivo;
     }
 
-    public void setCaminho_arquivo(String caminho_arquivo) {
-        this.caminho_arquivo = caminho_arquivo;
+    public void setNome_arquivo(String nome_arquivo) {
+        this.nome_arquivo = nome_arquivo;
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.squad05.chatbot.models.Funcionario;
 import org.squad05.chatbot.repositories.FuncionarioRepository;
 import org.squad05.chatbot.service.exceptions.DataBaseException;
-import org.squad05.chatbot.service.exceptions.FuncionarioDuplicatedException;
 import org.squad05.chatbot.service.exceptions.ResourceNotFoundException;
 
 import java.util.List;
@@ -18,9 +17,6 @@ public class FuncionarioService {
 
     //Criar funcionário
     public Funcionario criarFuncionario(Funcionario funcionario) {
-        if (funcionarioRepository.existsByCpf(funcionario.getCpf())) {
-            throw new FuncionarioDuplicatedException("Já existe um funcionário com esse CPF: " + funcionario.getCpf());
-        }
         return funcionarioRepository.save(funcionario);
     }
 
@@ -31,9 +27,12 @@ public class FuncionarioService {
     }
 
     //Buscar funcionário por CPF
-    public Funcionario buscarFuncionarioPorCpf(String cpf) {
-        return funcionarioRepository.findByCpf(cpf)
-                .orElseThrow(() -> new ResourceNotFoundException("CPF não encontrado: " + cpf));
+    public List<Funcionario> buscarFuncionarioPorCpf(String cpf) {
+        List<Funcionario> funcionarios = funcionarioRepository.findByCpf(cpf);
+        if (funcionarios.isEmpty()) {
+            throw new ResourceNotFoundException("CPF não encontrado: " + cpf);
+        }
+        return funcionarios;
     }
 
     //Atualizar um funcionário

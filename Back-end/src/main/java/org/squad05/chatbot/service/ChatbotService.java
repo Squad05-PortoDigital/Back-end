@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -142,7 +141,7 @@ public class ChatbotService {
 
             ChatbotProcesso processo = buscarProcessoPorId(ocorrenciaId);
 
-            processo.setCaminho_arquivo(nomeArquivo);//Associa o arquivo ao processo
+            processo.setNome_arquivo(nomeArquivo);//Associa o arquivo ao processo
             chatbotRepository.save(processo);
 
             return ServletUriComponentsBuilder.fromCurrentContextPath()
