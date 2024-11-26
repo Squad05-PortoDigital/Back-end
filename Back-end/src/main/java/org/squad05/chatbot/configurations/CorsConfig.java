@@ -14,6 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
                         "https://back-end-chatbot-deploy.up.railway.app",
                         "http://127.0.0.1:5500") //Enderço do front de Ryan
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*", "Content-Type", "Authorization");
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
