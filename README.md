@@ -74,7 +74,7 @@ Essa versão é a final para apresentação do projeto
 * **Guilherme Silva** - *Desenvolvedor Back-End* - [GuilhermeD9](https://github.com/GuilhermeD9)
 * **Gustavo Sotero** - *Assistente de Desenvolvimento* - [gustavo-sotero](https://github.com/gustavo-sotero)
 * **Ryan Nardelli** - *Desenvolvedor Front-End* - [ryannardelli](https://github.com/ryannardelli)
-* **Bianca Arielly** - *Analista de Processos e Design* - [biaarielly](??)
+* **Bianca Arielly** - *Analista de Processos e Design* - [BiancaAriellyFP](https://github.com/BiancaAriellyFP)
   
 
 ## 📄 Licença
