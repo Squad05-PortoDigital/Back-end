@@ -11,8 +11,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("https://squad05-portodigital.github.io", //Endereço front-end
-                        "https://back-end-chatbot-deploy.up.railway.app",
-                        "http://127.0.0.1:5500") //Enderço do front de Ryan
+                        "https://back-end-chatbot-deploy.up.railway.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
