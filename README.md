@@ -7,8 +7,8 @@ Um chatbot feito para resolver causas de RH
 Essas instruções permitirão que você obtenha uma cópia do projeto em operação na sua máquina local para fins de desenvolvimento e teste.
 
 ### Importante
-Até a data de 02/12/2024 o software está hospedado e funcionando para apresentação, para verificar se a aplicação ainda funciona, acesse:
-https://squad05-portodigital.github.io/Front-end/
+Até a data de 02/12/2024 o software está hospedado e funcionando para apresentação, para verificar se a aplicação ainda está online, acesse:
+[Link do projeto](https://squad05-portodigital.github.io/Front-end/)
 
 
 ### 📋 Pré-requisitos
