@@ -2,6 +2,8 @@
 
 Um chatbot feito para resolver causas de RH
 
+* Esse projeto é uma parceria da Universidade Tiradentes com o Porto Digital e a GetInfo Soluções de Aracaju-Se
+
 ## 🚀 Começando
 
 Essas instruções permitirão que você obtenha uma cópia do projeto em operação na sua máquina local para fins de desenvolvimento e teste.
