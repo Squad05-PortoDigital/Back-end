@@ -1,94 +1,86 @@
-# ChatBot for GetInfo Soluções
+# Infobot
 
-![GitHub repo size](https://img.shields.io/github/repo-size/Squad05-PortoDigital/Chatbot-GetInfo?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/Squad05-PortoDigital/Chatbot-GetInfo?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/Squad05-PortoDigital/Chatbot-GetInfo?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/Squad05-PortoDigital/Chatbot-GetInfo?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/Squad05-PortoDigital/Chatbot-GetInfo?style=for-the-badge)
+Um chatbot feito para resolver causas de RH
 
+## 🚀 Começando
 
-> ChatBot para empresas voltado ao setor de RH.
+Essas instruções permitirão que você obtenha uma cópia do projeto em operação na sua máquina local para fins de desenvolvimento e teste.
 
-### Ajustes e melhorias
-
-O projeto ainda está em desenvolvimento e as próximas atualizações estão a caminho...
+### Importante
+Até a data de 02/12/2024 o software está hospedado e funcionando para apresentação, para verificar se a aplicação ainda funciona, acesse:
+https://squad05-portodigital.github.io/Front-end/
 
 
-## 💻 Pré-requisitos
+### 📋 Pré-requisitos
 
-Antes de começar, verifique se você atendeu aos seguintes requisitos:
-
-- Você instalou a versão de `<Java(21 ou superior) / PostgreeSQL(Qualquer versão)>`
-- Você tem uma máquina `<Windows / Linux / Mac>`.
-
-## 🚀 Configurando <Chatbot>
-
-Para configurar o projeto, siga estas etapas:
+De que coisas você precisa para instalar o software e como instalá-lo?
 
 ```
-Abra sua IDE para o back-end (Recomendamos a InteliJ), vá até o arquivo application.propperties
-e insira suas credenciais do banco de dados nos campos username e password.
-
-Crie no seu banco de dados PostgreeSQL, um database chamado chatbotgetin.
-Faça o load do backup mais recente da pasta BACKUPBD, que está em backend>src.
+Java(versão 21 ou superior)
+Uma IDE de sua preferência (Recomendamos o Intelij)
+PostgreSQL Server instalado
 ```
 
-## ☕ Usando <Chatbot>
+### 🔧 Instalação
 
-Para usar o projeto, siga estas etapas:
+Uma série de exemplos passo-a-passo que informam o que você deve executar para ter um ambiente de desenvolvimento em execução.
+
+Diga como essa etapa será:
 
 ```
-No back-end, no arquivo principal, acione o Run na aplicação e aguarde o spring inicializar.
-Após isso, abra com o navegador o arquivo index.html
-Por fim, usufrua da aplicação!
+Criar um database chamado chatbot
+Abrir a pasta do back-end com a IDE
+Abra o arquivo application.propperties
+Altere as informações do banco de dados como endereço, username e etc para os seus padrões
 ```
 
-## 📫 Contribuindo para <nome_do_projeto>
+E por fim:
 
-Para contribuir com <Chatbot>, siga estas etapas:
+```
+Inicialize o container Docker
+```
 
-1. Bifurque este repositório.
-2. Crie um branch: `git checkout -b <nome_branch>`.
-3. Faça suas alterações e confirme-as: `git commit -m '<mensagem_commit>'`
-4. Envie para o branch original: `git push origin <nome_do_projeto> / <local>`
-5. Crie a solicitação de pull.
+Para verificar se está funcionando, acesse seu localhost com a extensão swagger
+(http://localhost:8080/swagger-ui/index.html#/)
 
-Como alternativa, consulte a documentação do GitHub em [como criar uma solicitação pull](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+## 📦 Implantação
 
-## 🤝 Colaboradores
+Para utilizar em um sistema ativo, é necessário fazer alguns ajustes de tabela e configurações, para que seja moldado de forma agradável
 
-Agradecemos às seguintes pessoas que contribuíram para este projeto:
+## 🛠️ Construído com
 
-<table>
-  <tr>
-    <td align="center">
-      <a href="#" title="defina o título do link">
-        <img src="https://avatars3.githubusercontent.com/u/31936044" width="100px;" alt="Foto do Iuri Silva no GitHub"/><br>
-        <sub>
-          <b>loading</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="#" title="defina o título do link">
-        <img src="https://s2.glbimg.com/FUcw2usZfSTL6yCCGj3L3v3SpJ8=/smart/e.glbimg.com/og/ed/f/original/2019/04/25/zuckerberg_podcast.jpg" width="100px;" alt="Foto do Mark Zuckerberg"/><br>
-        <sub>
-          <b>loading</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="#" title="defina o título do link">
-        <img src="https://miro.medium.com/max/360/0*1SkS3mSorArvY9kS.jpg" width="100px;" alt="Foto do Steve Jobs"/><br>
-        <sub>
-          <b>loading</b>
-        </sub>
-      </a>
-    </td>
-  </tr>
-</table>
+Mencione as ferramentas que você usou para criar seu projeto
+
+* [Java](https://www.java.com/pt-BR/) - Linguagem de desenvolvimento
+* [Spring Boot](https://spring.io/projects/spring-boot) - Framework do back-end
+* [Maven](https://maven.apache.org/) - Gerente de Dependência
+* [PostgreSQL](https://www.postgresql.org/) - Banco de dados relacional
+
+## 🖇️ Colaborando
+
+Você pode colaborar com o projeto por meio de issues ou pull requests! Só não garanto que veremos imediatamente rsrs
+
+## 📌 Versão
+
+Essa versão é a final para apresentação do projeto
+
+## ✒️ Autores
 
 
-## 📝 Licença
+* **Antony Rafael** - *Responsável pelo Cloud* - [rafaelsouzapinto](https://github.com/rafaelsouzapinto)
+* **Austin Farias** - *Documentação & Colaboração* - [Austinmff](https://github.com/Austinmff)
+* **Guilherme Silva** - *Desenvolvedor Back-End* - [GuilhermeD9](https://github.com/GuilhermeD9)
+* **Gustavo Sotero** - *Assistente de Desenvolvimento* - [gustavo-sotero](https://github.com/gustavo-sotero)
+* **Ryan Nardelli** - *Desenvolvedor Front-End* - [ryannardelli](https://github.com/ryannardelli)
+* **Bianca Arielly** - *Analista de Processos e Design* - [biaarielly](??)
+  
 
-Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
+## 📄 Licença
+
+Este projeto está sob a licença (sua licença) - veja o arquivo [LICENSE.md](https://github.com/Squad05-PortoDigital/Back-end/blob/main/LICENSE) para detalhes.
+
+## 🎁 Expressões de gratidão
+
+* Um agradecimento a João Neto por todo apoio nessa jornada🫂;
+* Conte a outras pessoas sobre este projeto 📢;
+* Obrigado a toda equipe pelo empenho! 🍺;
