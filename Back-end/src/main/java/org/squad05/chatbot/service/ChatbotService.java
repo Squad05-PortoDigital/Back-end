@@ -141,7 +141,7 @@ public class ChatbotService {
 
             ChatbotProcesso processo = buscarProcessoPorId(ocorrenciaId);
 
-            processo.setCaminho_arquivo(nomeArquivo);//Associa o arquivo ao processo
+            processo.setNome_arquivo(nomeArquivo);//Associa o arquivo ao processo
             chatbotRepository.save(processo);
 
             return ServletUriComponentsBuilder.fromCurrentContextPath()

@@ -45,7 +45,7 @@ public class ChatbotController {
         return ResponseEntity.ok(processo);
     }
 
-    //Atualizar processo (UPDATE)
+    //Atualizar processo (PUT)
     @PutMapping("/{id}")
     public ResponseEntity<ChatbotProcesso> atualizarProcesso(@PathVariable Long id, @RequestBody ChatbotProcessoDTO dadosAtualizados) {
         ChatbotProcesso processoAtualizado = chatbotService.atualizarProcesso(id, dadosAtualizados);
@@ -93,7 +93,7 @@ public class ChatbotController {
                 .body(resource);
     }
 
-    //Listar arquivos (GET)
+    //Listar arquivos disponíveis (GET)
     @GetMapping("/files-list")
     public ResponseEntity<List<String>> listarArquivos() throws IOException {
         List<String> fileNames = chatbotService.listarArquivos();
